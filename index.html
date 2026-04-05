@@ -309,7 +309,6 @@
 
     <script>
         // --- ELECTRON IPC & CONTROLS ---
-        // We only require IPC if running in Electron, preventing errors if opened in a standard Chrome tab
         const isElectron = typeof require !== 'undefined';
         const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
 
@@ -317,6 +316,16 @@
             if (typeof window.close === 'function') {
                 window.close();
             }
+        }
+
+        // Initialize UI with saved hotkey from backend
+        if (ipcRenderer) {
+            ipcRenderer.on('init-hotkey', (event, savedHotkey) => {
+                const btn = document.getElementById('hotkey-btn');
+                if (btn) {
+                    btn.innerText = savedHotkey.replace('CommandOrControl', 'Ctrl');
+                }
+            });
         }
 
         // --- HOTKEY CAPTURE LOGIC ---
@@ -333,12 +342,10 @@
             if (!isRecordingHotkey) return;
             e.preventDefault();
 
-            // Ignore standalone modifiers. We wait for a final key.
             const modifiers = ['Control', 'Alt', 'Shift', 'Meta'];
-            if (modifiers.includes(e.key)) return;
+            if (modifiers.includes(e.key)) return; // Wait for the final key
 
             let keys = [];
-            // Electron uses "CommandOrControl" to handle Ctrl across OSs
             if (e.ctrlKey || e.metaKey) keys.push('CommandOrControl');
             if (e.altKey) keys.push('Alt');
             if (e.shiftKey) keys.push('Shift');
@@ -349,12 +356,10 @@
             keys.push(key);
             const hotkeyString = keys.join('+');
 
-            // Format it nicely for the UI (Users prefer to read 'Ctrl' instead of 'CommandOrControl')
             hotkeyBtn.innerText = hotkeyString.replace('CommandOrControl', 'Ctrl');
             hotkeyBtn.classList.remove('recording');
             isRecordingHotkey = false;
 
-            // Transmit the new hotkey to the main process backend
             if (ipcRenderer) {
                 ipcRenderer.send('update-hotkey', hotkeyString);
             }
