@@ -1,6 +1,7 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
 
-// CRITICAL FIX: Disables hardware acceleration to fix the black background bug on Windows
+// CRITICAL FIX: Disables hardware acceleration. This forces Windows to render 
+// the transparent background properly so your opacity slider actually works.
 app.disableHardwareAcceleration();
 
 let mainWindow;
@@ -9,10 +10,11 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
-        transparent: true,     // Tells the window to be see-through
-        frame: false,          // Frameless
+        title: "Phasmo Cheatsheet Overlay", // Forces Task Manager to see a proper name
+        transparent: true,     
+        frame: false,          
         alwaysOnTop: true,     
-        skipTaskbar: false,    // FIXED: App will now show in your taskbar
+        skipTaskbar: false,    // Forces it onto the taskbar so you can see it
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
