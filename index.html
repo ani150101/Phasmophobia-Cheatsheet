@@ -114,6 +114,7 @@
         .filter-btn.ev-btn[data-state="1"] { background: var(--ev-found); border-color: var(--ev-found-border); color: white; }
         .filter-btn.ev-btn[data-state="2"], .filter-btn.spd-btn[data-state="2"] { background: var(--ev-ruled); border-color: var(--ev-ruled-border); color: white; opacity: 0.7; text-decoration: line-through; }
         .filter-btn.spd-btn[data-state="1"] { background: var(--spd-found); border-color: var(--spd-found-border); color: white; }
+        .filter-btn.impossible { opacity: 0.3; text-decoration: line-through; }
 
         /* --- MAIN CONTENT --- */
         .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-base); }
@@ -133,22 +134,55 @@
         }
         .close-x-btn:hover { background: #ef4444; color: white; border-color: #dc2626; transform: scale(1.05); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
 
+        /* BEHAVIORAL PIVOT ENGINE */
+        .recommendation-engine {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.1) 0%, rgba(39, 39, 42, 0.3) 100%);
+            border: 1px solid var(--text-accent);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 0 auto 20px auto;
+            max-width: 1600px;
+        }
+        .recommendation-engine h4 {
+            margin: 0 0 10px 0; color: var(--text-accent); text-transform: uppercase; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.5px;
+        }
+        .recommendation-list { margin: 0; padding-left: 20px; font-size: 0.85rem; line-height: 1.5; color: var(--text-main); }
+        .recommendation-list li { margin-bottom: 5px; }
+        .recommendation-list b { color: var(--spd-found); }
+
         /* GHOST GRID */
         .ghost-scroll { flex: 1; overflow-y: auto; padding: 25px; }
         .ghost-scroll::-webkit-scrollbar { width: 8px; }
         .ghost-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
         .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-width: 1600px; margin: 0 auto; align-items: stretch;}
         
-        .ghost-card { background: linear-gradient(145deg, var(--bg-card) 0%, rgba(39, 39, 42, 0.3) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 18px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;}
-        .ghost-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, transparent); transition: 0.3s;}
+        .ghost-card { background: linear-gradient(145deg, var(--bg-card) 0%, rgba(39, 39, 42, 0.3) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 18px; padding-top: 24px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;}
+        .ghost-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, transparent); transition: 0.3s; z-index: 2;}
         .ghost-card:hover { transform: translateY(-3px); border-color: var(--text-muted); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .ghost-card:hover::before { background: linear-gradient(90deg, var(--text-accent), var(--spd-found)); }
         
         .ghost-card.speed-highlight { border-color: var(--spd-found-border); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
+        
+        /* MANUAL CROSSED OUT */
         .ghost-card.crossed-out { opacity: 0.25; filter: grayscale(100%); transform: none; box-shadow: none; border-color: transparent; }
         .ghost-card.crossed-out .card-title { text-decoration: line-through; color: var(--text-muted); }
         .ghost-card.crossed-out::before { display: none; }
-        body.hide-crossed-mode .ghost-card.crossed-out { display: none !important; }
+        
+        /* AUTO CROSSED OUT (FORCED EVIDENCE ENGINE) */
+        .ghost-card.auto-crossed { border-color: var(--ev-ruled-border); background: rgba(239, 68, 68, 0.05); }
+        .ghost-card.auto-crossed .card-front, .ghost-card.auto-crossed .card-back { opacity: 0.5; filter: grayscale(100%); }
+        .ghost-card.auto-crossed .card-title { text-decoration: line-through; }
+        .ghost-card.auto-crossed::before { display: none; }
+        .auto-cross-banner {
+            position: absolute; top: 0; left: 0; width: 100%;
+            background: var(--ev-ruled); color: white;
+            font-size: 0.65rem; font-weight: 800; text-align: center;
+            padding: 3px 0; text-transform: uppercase; z-index: 10;
+        }
+
+        /* HIDE TOGGLE RULES */
+        body.hide-crossed-mode .ghost-card.crossed-out,
+        body.hide-crossed-mode .ghost-card.auto-crossed { display: none !important; }
 
         .card-front { display: flex; flex-direction: column; gap: 8px; height: 100%;}
         .card-back { display: none; flex-direction: column; gap: 8px; height: 100%; }
@@ -190,11 +224,19 @@
         </div>
 
         <div class="sidebar-content no-drag">
-
             <div class="settings-panel">
                 <div class="setting-row">
                     <span class="setting-label">Toggle Hotkey</span>
                     <button class="hotkey-btn" id="hotkey-btn" title="Click to assign a new hotkey">Alt+X</button>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Evidence Given</span>
+                    <select class="setting-select" id="evidence-count" onchange="updateMultipliers()">
+                        <option value="3" selected>3</option>
+                        <option value="2">2 (Nightmare)</option>
+                        <option value="1">1 (Insanity)</option>
+                        <option value="0">0 (Zero Ev)</option>
+                    </select>
                 </div>
                 <div class="setting-row">
                     <span class="setting-label">Custom Speed</span>
@@ -301,6 +343,11 @@
         </div>
 
         <div class="ghost-scroll no-drag">
+            <div class="recommendation-engine" id="recommendation-engine" style="display: none;">
+                <h4>🧠 Behavioral Pivot</h4>
+                <ul class="recommendation-list" id="recommendation-list"></ul>
+            </div>
+            
             <div class="ghost-grid" id="ghost-grid"></div>
         </div>
     </main>
@@ -316,19 +363,18 @@
             }
         }
 
-        // Sends visual UI choices to backend config
         function saveUIState() {
             if (ipcRenderer) {
                 ipcRenderer.send('update-settings', {
                     theme: document.documentElement.getAttribute('data-theme'),
                     customSpeed: parseFloat(document.getElementById('custom-speed-multiplier').value),
                     tapTolerance: parseFloat(document.getElementById('tap-tolerance').value),
+                    evidenceCount: parseInt(document.getElementById('evidence-count').value),
                     hideCrossed: hideCrossedMode
                 });
             }
         }
 
-        // Initialize UI with saved data from backend
         if (ipcRenderer) {
             ipcRenderer.on('init-config', (event, savedConfig) => {
                 if (savedConfig.hotkey) {
@@ -338,11 +384,14 @@
                 if (savedConfig.theme) {
                     document.documentElement.setAttribute('data-theme', savedConfig.theme);
                 }
-                if (savedConfig.customSpeed) {
+                if (savedConfig.customSpeed !== undefined) {
                     document.getElementById('custom-speed-multiplier').value = savedConfig.customSpeed.toString();
                 }
-                if (savedConfig.tapTolerance) {
+                if (savedConfig.tapTolerance !== undefined) {
                     document.getElementById('tap-tolerance').value = savedConfig.tapTolerance.toString();
+                }
+                if (savedConfig.evidenceCount !== undefined) {
+                    document.getElementById('evidence-count').value = savedConfig.evidenceCount.toString();
                 }
                 if (savedConfig.hideCrossed) {
                     hideCrossedMode = true;
@@ -351,7 +400,6 @@
                     hcBtn.classList.add('active');
                     hcBtn.innerHTML = '🙈 Show Crossed';
                 }
-                // Force a calculation based on saved loaded speeds
                 updateMultipliers(false); 
             });
         }
@@ -371,7 +419,7 @@
             e.preventDefault();
 
             const modifiers = ['Control', 'Alt', 'Shift', 'Meta'];
-            if (modifiers.includes(e.key)) return; // Wait for the final key
+            if (modifiers.includes(e.key)) return; 
 
             let keys = [];
             if (e.ctrlKey || e.metaKey) keys.push('CommandOrControl');
@@ -399,6 +447,15 @@
         const speedTraits = ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"];
         const KNOWN_SPEEDS = [0.4, 1.0, 1.2, 1.36, 1.4, 1.45, 1.5, 1.53, 1.7, 1.87, 1.96, 2.25, 2.5, 2.7, 2.75, 3.0];
         
+        // ENGINE DATA FOR FORCED EVIDENCE ELIMINATOR
+        const forcedEvidence = {
+            "Deogen": "Spirit Box",
+            "Moroi": "Spirit Box",
+            "Goryo": "DOTS Projector",
+            "Hantu": "Freezing Temperatures",
+            "Obake": "Ultraviolet"
+        };
+
         const ghosts = [
             { name: "Dayan", rawSpeeds: [1.2, 2.25], evidences: ["EMF Level 5", "Ghost Orb", "Spirit Box"], tells: "Speed/sanity depends on player movement within 10m. Crawls if you stand still; speeds up if you move. <b>Female models only.</b>", speed: "1.2 m/s (Still) / 2.25 (Walk)", guide: "Loop it around a small object (like kitchen island). It will speed up significantly when moving, but crawl to a halt if you stop." },
             { name: "Gallu", rawSpeeds: [1.36, 1.7, 1.96], evidences: ["EMF Level 5", "Spirit Box", "Ultraviolet"], tells: "Cycles Normal/Enraged/Weakened. Enrages via salt, smudge, or crucifix. <b>When enraged, ignores salt</b> (can only step in salt once before 2s delay).", speed: "1.36 ➔ 1.7 ➔ 1.96 m/s", guide: "Smudge it during a hunt to enrage it. Measure the speed; it should be blazing fast (1.96). If you place salt, it will speed right over the second pile." },
@@ -578,7 +635,11 @@
         function stopTimer() { clearInterval(smudgeInterval); smudgeSeconds = 0; updateTimerDisplay(); document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active')); }
         function updateTimerDisplay() { let m = Math.floor(smudgeSeconds / 60), s = smudgeSeconds % 60; document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
 
-        function toggleFlip(ghostName, event) { event.stopPropagation(); const card = document.getElementById('ghost-' + ghostName.replace(/\s+/g, '-')); if (card) card.classList.toggle('show-guide'); }
+        function toggleFlip(ghostName, event) { 
+            event.stopPropagation(); 
+            const card = document.getElementById('ghost-' + ghostName.replace(/\s+/g, '-')); 
+            if (card) card.classList.toggle('show-guide'); 
+        }
 
         function init() {
             const createBtn = (cId, arr, stObj, tc, pfx) => {
@@ -594,9 +655,18 @@
 
             const grid = document.getElementById('ghost-grid');
             ghosts.forEach(g => {
-                const card = document.createElement('div'); card.className = 'ghost-card'; card.id = 'ghost-' + g.name.replace(/\s+/g, '-');
-                card.onclick = () => { card.classList.toggle('crossed-out'); updateCounter(); };
+                const card = document.createElement('div'); 
+                card.className = 'ghost-card'; 
+                card.id = 'ghost-' + g.name.replace(/\s+/g, '-');
+                
+                card.onclick = (e) => { 
+                    if(e.target.classList.contains('flip-btn')) return;
+                    card.classList.toggle('crossed-out'); 
+                    render(); 
+                };
+                
                 card.innerHTML = `
+                    <div class="auto-cross-banner" style="display: none;"></div>
                     <div class="card-front">
                         <div class="card-header"><h3 class="card-title">${g.name}</h3><button class="flip-btn no-drag" onclick="toggleFlip('${g.name}', event)">❔ Guide</button></div>
                         <div class="card-section"><span class="section-label">Evidence</span><div class="card-evidences">${g.evidences.map(e => `<span class="ev-pill">${e}</span>`).join('')}</div></div>
@@ -625,21 +695,150 @@
             resetTap(); render();
         }
 
+        function updateRecommendations(validGhosts) {
+            const engineContainer = document.getElementById('recommendation-engine');
+            const list = document.getElementById('recommendation-list');
+            list.innerHTML = '';
+
+            if (validGhosts.length === 0 || validGhosts.length === ghosts.length) {
+                engineContainer.style.display = 'none';
+                return;
+            }
+            if (validGhosts.length === 1) {
+                engineContainer.style.display = 'none';
+                return;
+            }
+
+            engineContainer.style.display = 'block';
+            let recs = [];
+            let gNames = validGhosts.map(g => g.name);
+
+            if (gNames.includes("Jinn") || gNames.includes("Hantu") || gNames.includes("Mare")) {
+                recs.push("<b>Breaker/Lights:</b> Turn the breaker ON/OFF. Jinn is fast with it ON, Hantu shows freezing breath with it OFF. Mare instantly turns lights off.");
+            }
+            if (gNames.includes("Wraith") || gNames.includes("Gallu")) {
+                recs.push("<b>Salt Test:</b> Place salt in doorways. Wraith never steps in it; enraged Gallu ignores the second pile.");
+            }
+            if (gNames.includes("Onryo")) {
+                recs.push("<b>Candle Test:</b> Place a lit candle. If it blows it out 3 times and hunts immediately, it's an Onryo.");
+            }
+            if (gNames.includes("Poltergeist") || gNames.includes("The Twins")) {
+                recs.push("<b>Item Throws:</b> Make a pile of items. Polty will explode them; Twins may throw items in different rooms simultaneously.");
+            }
+            if (gNames.includes("Demon") || gNames.includes("Spirit") || gNames.includes("Moroi")) {
+                recs.push("<b>Smudge Test:</b> Smudge the ghost. Demon can hunt before 90s, Spirit is blocked for 180s. Moroi is blinded for 7.5s during a hunt.");
+            }
+            if (gNames.includes("Deogen") || gNames.includes("Revenant") || gNames.includes("Thaye")) {
+                recs.push("<b>Hunt Speed:</b> Loop the ghost. Deogen crawls near you, Revenant rockets with LOS, Thaye starts blazing fast and ages/slows down.");
+            }
+            if (gNames.includes("Phantom") || gNames.includes("Oni") || gNames.includes("Banshee")) {
+                recs.push("<b>Events/Audio:</b> Take a photo during an event (Phantom vanishes), look for the airball mist (Oni never does it), or use Paramic for Banshee wail.");
+            }
+            if (gNames.includes("Myling")) {
+                recs.push("<b>Footsteps:</b> Hide with a flashlight ON the floor. If it flickers before you hear footsteps, it's a Myling.");
+            }
+
+            recs = recs.slice(0, 3);
+
+            if (recs.length === 0) {
+                recs.push("Gather more evidence or observe hunt speeds to narrow down the list.");
+            }
+
+            recs.forEach(r => {
+                let li = document.createElement('li');
+                li.innerHTML = r;
+                list.appendChild(li);
+            });
+        }
+
         function render() {
+            let evidenceCount = parseInt(document.getElementById('evidence-count').value);
+            let foundEvidences = evidenceNames.filter(ev => evStates[ev] === 1);
+            let validGhosts = [];
+
             ghosts.forEach(g => {
                 let isValid = true;
+                let autoCrossReason = null;
+                
+                // 1. Base Evidence & Speed Logic (Journal Rules)
                 for (let ev of evidenceNames) { if ((evStates[ev] === 1 && !g.evidences.includes(ev)) || (evStates[ev] === 2 && g.evidences.includes(ev))) isValid = false; }
                 for (let spd of speedTraits) { if ((spdStates[spd] === 1 && !g.speeds.includes(spd)) || (spdStates[spd] === 2 && g.speeds.includes(spd))) isValid = false; }
+                
                 if (currentCalculatedSpeed !== null) {
                     let tol = parseFloat(document.getElementById('tap-tolerance').value), tm = customSpeedMult * (isBloodMoon ? 1.15 : 1.0);
                     if (!(g.name === "The Mimic" || g.rawSpeeds.some(bs => Math.abs((bs * tm) - currentCalculatedSpeed) <= tol))) isValid = false;
                 }
-                document.getElementById('ghost-' + g.name.replace(/\s+/g, '-')).style.display = isValid ? 'flex' : 'none';
+
+                // 2. Forced Evidence Eliminator
+                let isAutoCrossed = false;
+                let forced = forcedEvidence[g.name];
+                
+                // Only run forced evidence checks if the ghost survived the base rules AND we are on a limited evidence mode
+                if (isValid && forced && (evidenceCount === 1 || evidenceCount === 2)) {
+                    if (foundEvidences.length === evidenceCount && !foundEvidences.includes(forced)) {
+                        isAutoCrossed = true;
+                        autoCrossReason = `Missing Forced: ${forced}`;
+                    }
+                }
+
+                const card = document.getElementById('ghost-' + g.name.replace(/\s+/g, '-'));
+                const banner = card.querySelector('.auto-cross-banner');
+
+                if (!isValid) {
+                    // Fails standard journal rules -> Hide completely
+                    card.style.display = 'none';
+                    card.classList.remove('auto-crossed');
+                    banner.style.display = 'none';
+                } else {
+                    // Survives standard rules -> Show card
+                    card.style.display = 'flex';
+                    
+                    if (isAutoCrossed) {
+                        card.classList.add('auto-crossed');
+                        banner.innerText = autoCrossReason;
+                        banner.style.display = 'block';
+                    } else {
+                        card.classList.remove('auto-crossed');
+                        banner.style.display = 'none';
+                        
+                        // Only add to valid pool if NOT Auto-Crossed AND NOT Manually Crossed
+                        if (!card.classList.contains('crossed-out')) {
+                            validGhosts.push(g);
+                        }
+                    }
+                }
             });
+
+            // 3. Smart Deduction Engine
+            let possibleEvidences = new Set();
+            validGhosts.forEach(g => {
+                g.evidences.forEach(ev => possibleEvidences.add(ev));
+                if (g.name === "The Mimic") possibleEvidences.add("Ghost Orb"); 
+            });
+
+            // THE MIMIC SAFETY NET (Evidence Cap Fix)
+            let mimicAlive = validGhosts.some(g => g.name === "The Mimic");
+            let hasOrb = foundEvidences.includes("Ghost Orb");
+            let realEvidenceLimit = (mimicAlive && hasOrb) ? evidenceCount + 1 : evidenceCount;
+            
+            let atEvidenceLimit = (foundEvidences.length >= realEvidenceLimit);
+
+            evidenceNames.forEach(ev => {
+                const btn = document.getElementById('ev-' + ev.replace(/[^a-zA-Z0-9<>]/g, ''));
+                let isImpossible = !possibleEvidences.has(ev) || (atEvidenceLimit && evStates[ev] === 0);
+                
+                if (isImpossible && evStates[ev] === 0) {
+                    btn.classList.add('impossible');
+                } else {
+                    btn.classList.remove('impossible');
+                }
+            });
+
+            updateRecommendations(validGhosts);
             updateCounter();
         }
 
-        function updateCounter() { document.getElementById('count-num').innerText = Array.from(document.querySelectorAll('.ghost-card')).filter(c => c.style.display !== 'none' && !c.classList.contains('crossed-out')).length; }
+        function updateCounter() { document.getElementById('count-num').innerText = Array.from(document.querySelectorAll('.ghost-card')).filter(c => c.style.display !== 'none' && !c.classList.contains('crossed-out') && !c.classList.contains('auto-crossed')).length; }
         window.onload = init;
     </script>
 </body>
