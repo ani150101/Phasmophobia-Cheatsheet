@@ -34,9 +34,7 @@
         }
 
         * { box-sizing: border-box; }
-        
         html { background: transparent !important; }
-        
         body { 
             background-color: var(--bg-base); color: var(--text-main); 
             font-family: 'Inter', -apple-system, sans-serif; 
@@ -44,7 +42,6 @@
             transition: background-color 0.3s ease; 
         }
 
-        /* ELECTRON DRAG ZONES */
         .drag-region { -webkit-app-region: drag; }
         .no-drag { -webkit-app-region: no-drag; }
         
@@ -53,32 +50,19 @@
             width: 310px; min-width: 280px; max-width: 450px; 
             background-color: var(--bg-panel); border-right: 1px solid var(--border); 
             display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; 
-            z-index: 10; box-shadow: 4px 0 24px rgba(0,0,0,0.2);
-            overflow-x: hidden; overflow-y: auto; 
+            z-index: 10; box-shadow: 4px 0 24px rgba(0,0,0,0.2); overflow-x: hidden; overflow-y: auto; 
         }
-        
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
-
-        .sidebar-header { 
-            padding: 15px; border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; background: var(--bg-panel); z-index: 10; 
-            display: flex; flex-direction: column; gap: 12px; cursor: move;
-        }
-        
+        .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-panel); z-index: 10; display: flex; flex-direction: column; gap: 12px; cursor: move; }
         .brand-container h1 { margin: 0; color: var(--text-accent); font-size: 1.15rem; text-transform: uppercase; font-weight: 800; line-height: 1.2;}
         .creator-tag { margin: 2px 0 0 0; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
         .discord-link { color: var(--discord-color); text-decoration: none; font-weight: 800; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px;}
         .discord-link:hover { color: #7289da; filter: drop-shadow(0 0 6px rgba(88, 101, 242, 0.4)); }
         
         .top-controls { display: flex; justify-content: space-between; gap: 6px; }
-        .control-btn { 
-            flex: 1; background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); 
-            padding: 6px 4px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; font-weight: 700; 
-            transition: 0.2s; text-align: center;
-        }
+        .control-btn { flex: 1; background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); padding: 6px 4px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: 0.2s; text-align: center; }
         .control-btn:hover { background: var(--btn-hover); transform: translateY(-1px); }
-
         .sidebar-content { padding: 15px; }
 
         /* SETTINGS PANEL */
@@ -86,8 +70,13 @@
         .setting-row { display: flex; justify-content: space-between; align-items: center; }
         .setting-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
         .setting-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; outline: none; cursor: pointer; max-width: 130px;}
-        .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; width: 65px; text-align: center;}
+        .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; min-width: 65px; text-align: center;}
         .toggle-btn.active { background: #880000; color: white; border-color: #ff4444; }
+        
+        /* NEW HOTKEY BTN STYLE */
+        .hotkey-btn { transition: all 0.2s ease; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-align: center; min-width: 65px; }
+        .hotkey-btn.recording { background: var(--spd-found); border-color: var(--spd-found-border); color: white; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
         /* SIDEBAR TOOLS */
         .tool-card { background: rgba(128,128,128,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
@@ -123,23 +112,17 @@
         .btn-list { display: flex; flex-direction: column; gap: 5px; }
         .filter-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: var(--btn-neutral); color: var(--text-main); border: 1px solid transparent; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.15s ease; }
         .filter-btn:hover { background: var(--btn-hover); border-color: var(--border); }
-        
         .filter-btn.ev-btn[data-state="1"] { background: var(--ev-found); border-color: var(--ev-found-border); color: white; }
         .filter-btn.ev-btn[data-state="2"], .filter-btn.spd-btn[data-state="2"] { background: var(--ev-ruled); border-color: var(--ev-ruled-border); color: white; opacity: 0.7; text-decoration: line-through; }
         .filter-btn.spd-btn[data-state="1"] { background: var(--spd-found); border-color: var(--spd-found-border); color: white; }
 
         /* --- MAIN CONTENT --- */
         .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-base); }
-        
-        .main-header { 
-            padding: 12px 25px; border-bottom: 1px solid var(--border); background-color: var(--bg-panel); 
-            display: flex; justify-content: space-between; align-items: center; z-index: 5; cursor: move;
-        }
+        .main-header { padding: 12px 25px; border-bottom: 1px solid var(--border); background-color: var(--bg-panel); display: flex; justify-content: space-between; align-items: center; z-index: 5; cursor: move; }
         .ghost-counter { font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin: 0; }
         .ghost-counter span { color: var(--text-accent); }
         
         .header-controls { display: flex; gap: 10px; align-items: center; }
-        
         .toggle-hide-btn { background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;}
         .toggle-hide-btn:hover { background: var(--btn-hover); }
         .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; }
@@ -211,6 +194,10 @@
         <div class="sidebar-content no-drag">
 
             <div class="settings-panel">
+                <div class="setting-row">
+                    <span class="setting-label">Toggle Hotkey</span>
+                    <button class="hotkey-btn" id="hotkey-btn" title="Click to assign a new hotkey">Alt+X</button>
+                </div>
                 <div class="setting-row">
                     <span class="setting-label">Custom Speed</span>
                     <select class="setting-select" id="custom-speed-multiplier" onchange="updateMultipliers()">
@@ -321,11 +308,58 @@
     </main>
 
     <script>
+        // --- ELECTRON IPC & CONTROLS ---
+        // We only require IPC if running in Electron, preventing errors if opened in a standard Chrome tab
+        const isElectron = typeof require !== 'undefined';
+        const ipcRenderer = isElectron ? require('electron').ipcRenderer : null;
+
         function closeApp() {
             if (typeof window.close === 'function') {
                 window.close();
             }
         }
+
+        // --- HOTKEY CAPTURE LOGIC ---
+        let isRecordingHotkey = false;
+        const hotkeyBtn = document.getElementById('hotkey-btn');
+
+        hotkeyBtn.addEventListener('click', () => {
+            isRecordingHotkey = true;
+            hotkeyBtn.innerText = "Listening...";
+            hotkeyBtn.classList.add('recording');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!isRecordingHotkey) return;
+            e.preventDefault();
+
+            // Ignore standalone modifiers. We wait for a final key.
+            const modifiers = ['Control', 'Alt', 'Shift', 'Meta'];
+            if (modifiers.includes(e.key)) return;
+
+            let keys = [];
+            // Electron uses "CommandOrControl" to handle Ctrl across OSs
+            if (e.ctrlKey || e.metaKey) keys.push('CommandOrControl');
+            if (e.altKey) keys.push('Alt');
+            if (e.shiftKey) keys.push('Shift');
+
+            let key = e.key.toUpperCase();
+            if (key === ' ') key = 'Space';
+            
+            keys.push(key);
+            const hotkeyString = keys.join('+');
+
+            // Format it nicely for the UI (Users prefer to read 'Ctrl' instead of 'CommandOrControl')
+            hotkeyBtn.innerText = hotkeyString.replace('CommandOrControl', 'Ctrl');
+            hotkeyBtn.classList.remove('recording');
+            isRecordingHotkey = false;
+
+            // Transmit the new hotkey to the main process backend
+            if (ipcRenderer) {
+                ipcRenderer.send('update-hotkey', hotkeyString);
+            }
+        });
+
 
         // --- DATA ---
         const evidenceNames = ["EMF Level 5", "DOTS Projector", "Ultraviolet", "Ghost Orb", "Ghost Writing", "Spirit Box", "Freezing Temperatures"];
