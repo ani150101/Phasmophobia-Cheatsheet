@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phasmophobia Cheatsheet - by Mr. Robot</title>
+    <style>
+        /* --- MODERN COLOR PALETTE --- */
+        :root[data-theme="dark"] {
+            --bg-base: #0f1115; 
+            --bg-panel: #16181d; 
+            --bg-card: #1c1e26; 
+            --bg-card-hover: #232630;
+            --text-main: #e2e8f0; 
+            --text-muted: #8b949e; 
+            --text-accent: #a371f7; 
+            --border: #2d313f;
+            --btn-neutral: #212530; 
+            --btn-hover: #2c3140;
+            --ev-found: #238636; --ev-found-border: #2ea043;
+            --ev-ruled: #da3633; --ev-ruled-border: #f85149;
+            --beh-found: #0277bd; --beh-found-border: #039be5;
+            --spd-found: #b07000; --spd-found-border: #d48806;
+            --discord-color: #5865F2;
+        }
+        :root[data-theme="light"] {
+            --bg-base: #f6f8fa; 
+            --bg-panel: #ffffff; 
+            --bg-card: #ffffff; 
+            --bg-card-hover: #f3f4f6;
+            --text-main: #1f2328; 
+            --text-muted: #656d76; 
+            --text-accent: #8250df; 
+            --border: #d0d7de;
+            --btn-neutral: #f3f4f6; 
+            --btn-hover: #e5e7eb;
+            --ev-found: #2da44e; --ev-found-border: #2c974b;
+            --ev-ruled: #cf222e; --ev-ruled-border: #a40e26;
+            --beh-found: #0288d1; --beh-found-border: #0277bd;
+            --spd-found: #d48806; --spd-found-border: #e29b16;
+            --discord-color: #5865F2;
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-base); 
+            color: var(--text-main); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; 
+            transition: background-color 0.3s; 
+        }
+        
+        /* --- RESIZABLE SIDEBAR --- */
+        .sidebar { 
+            width: 280px; min-width: 240px; max-width: 500px; 
+            background-color: var(--bg-panel); 
+            border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; 
+            z-index: 10; box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+            resize: horizontal; 
+            overflow-x: hidden; overflow-y: auto; 
+        }
+        
+        .sidebar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .sidebar::-webkit-scrollbar-corner { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-panel); z-index: 2; display: flex; flex-direction: column; gap: 12px; }
+        
+        .brand-container { display: flex; flex-direction: column; gap: 4px; }
+        .brand-container h1 { margin: 0; color: var(--text-accent); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; line-height: 1.2; word-break: break-word;}
+        .creator-tag { margin: 0; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .discord-link { color: var(--discord-color); text-decoration: none; font-weight: 800; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px;}
+        .discord-link:hover { color: #7289da; text-shadow: 0 0 10px rgba(88, 101, 242, 0.5); }
+        
+        .top-controls { display: flex; justify-content: space-between; gap: 8px; }
+        .control-btn { flex: 1; background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); padding: 6px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s; text-align: center;}
+        .control-btn:hover { background: var(--btn-hover); border-color: var(--text-muted); }
+
+        .sidebar-content { padding: 15px; }
+
+        .filter-group { margin-bottom: 20px; }
+        .filter-group h3 { margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; font-weight: 700;}
+        .btn-list { display: flex; flex-direction: column; gap: 5px; }
+        
+        .filter-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background-color: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; transition: all 0.1s ease; text-align: left; }
+        .filter-btn:hover { background-color: var(--btn-hover); }
+        .icon-placeholder { width: 20px; text-align: center; font-size: 0.8rem; }
+
+        /* Button Colors */
+        .filter-btn.ev-btn[data-state="1"] { background-color: var(--ev-found); border-color: var(--ev-found-border); color: white; }
+        .filter-btn.ev-btn[data-state="2"], .filter-btn.spd-btn[data-state="2"] { 
+            background-color: var(--ev-ruled); border-color: var(--ev-ruled-border); color: white; opacity: 0.65; text-decoration: line-through; 
+        }
+        .filter-btn.spd-btn[data-state="1"] { background-color: var(--spd-found); border-color: var(--spd-found-border); color: white; }
+
+        /* --- MAIN CONTENT & SINGLE ROW HEADER --- */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-base); min-width: 0; }
+        
+        /* EXTREME COMPACT SINGLE-LINE HEADER CSS */
+        .main-header { 
+            padding: 8px 15px; 
+            border-bottom: 1px solid var(--border); 
+            background-color: var(--bg-panel); 
+            display: flex; 
+            flex-direction: row; 
+            flex-wrap: nowrap; 
+            align-items: center; 
+            gap: 15px; 
+            z-index: 5; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            overflow-x: auto; 
+            white-space: nowrap;
+        }
+
+        .main-header::-webkit-scrollbar { height: 4px; }
+        .main-header::-webkit-scrollbar-track { background: transparent; }
+        .main-header::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        
+        .ghost-counter { font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0; flex-shrink: 0;}
+        .ghost-counter span { color: var(--text-accent); }
+        
+        /* Inline Tools Row */
+        .tools-row {
+            display: flex; 
+            flex-direction: row;
+            flex-wrap: nowrap; 
+            align-items: center; 
+            gap: 12px;
+            margin-left: auto; 
+        }
+
+        .tool-group { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            border-right: 1px solid var(--border); 
+            padding-right: 12px; 
+            flex-shrink: 0; 
+        }
+        .tool-group:last-child { border-right: none; padding-right: 0; }
+        .tool-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .tool-btn { background: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.75rem; transition: 0.1s;}
+        .tool-btn:hover { background: var(--btn-hover); border-color: var(--text-muted);}
+
+        /* Timer UI */
+        .timer-display { font-size: 1.2rem; font-family: monospace; font-weight: bold; color: var(--text-main); min-width: 48px; text-align: center; border-radius: 4px; transition: color 0.2s;}
+        .timer-btn-start { background: var(--ev-ruled); color: white; border-color: var(--ev-ruled-border); }
+        .timer-btn-start:hover { filter: brightness(1.1); }
+        .timer-milestones { display: flex; gap: 3px; }
+        .milestone { padding: 2px 4px; border-radius: 4px; background: var(--bg-base); border: 1px solid var(--border); font-size: 0.6rem; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
+        .milestone.active { background: var(--ev-found); border-color: var(--ev-found-border); color: white; box-shadow: 0 0 8px rgba(46, 160, 67, 0.4); }
+
+        /* Speed Finder UI (Tapper) */
+        .speed-wrapper { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .speed-display { font-size: 1.2rem; font-family: monospace; font-weight: bold; color: var(--spd-found-border); min-width: 65px; text-align: center; }
+        /* Adjusted History to be inline */
+        .speed-history { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; font-weight: bold; white-space: nowrap; }
+        .tap-btn { background: var(--spd-found); color: white; border: 1px solid var(--spd-found-border); }
+        .tap-btn:active { transform: scale(0.92); }
+
+        @keyframes timerWarningFlash {
+            0% { background-color: var(--ev-ruled); color: white; box-shadow: 0 0 15px var(--ev-ruled); }
+            100% { background-color: transparent; color: var(--text-main); box-shadow: none; }
+        }
+        .timer-warning-flash { animation: timerWarningFlash 1s ease-out; }
+
+        /* Metro UI */
+        .metro-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 6px; border-radius: 6px; font-size: 0.75rem; outline: none; font-weight: 600; max-width: 140px;}
+        .metro-btn { background: var(--spd-found-border); color: #000; border: 1px solid var(--spd-found-border); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 0.75rem; transition: all 0.05s; }
+        .metro-btn.playing { background: var(--bg-base); color: var(--text-main); border-color: var(--border); }
+        .metro-btn.flash { background: #00ff00 !important; color: #000 !important; box-shadow: 0 0 10px rgba(0, 255, 0, 0.8); border-color: #00ff00 !important; }
+
+        .toggle-hide-btn { background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0;}
+        .toggle-hide-btn:hover { background: var(--btn-hover); border-color: var(--text-muted); }
+        .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: var(--text-accent); }
+
+        /* --- GHOST GRID & FLIP CARDS --- */
+        .ghost-scroll { flex: 1; overflow-y: auto; padding: 25px; }
+        .ghost-scroll::-webkit-scrollbar { width: 8px; }
+        .ghost-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-width: 1600px; margin: 0 auto; align-items: stretch;}
+        
+        .ghost-card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .ghost-card:hover { transform: translateY(-3px); border-color: var(--text-accent); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        
+        /* Calculated Speed Highlight Glow */
+        .ghost-card.speed-highlight {
+            border-color: var(--spd-found-border);
+            box-shadow: 0 0 20px rgba(212, 136, 6, 0.4);
+            background-color: rgba(212, 136, 6, 0.05);
+        }
+
+        .ghost-card.crossed-out { opacity: 0.25; filter: grayscale(100%); transform: none; box-shadow: none; border-color: var(--border); }
+        .ghost-card.crossed-out .card-title { text-decoration: line-through; color: var(--text-muted); }
+        body.hide-crossed-mode .ghost-card.crossed-out { display: none !important; }
+
+        .card-front { display: flex; flex-direction: column; gap: 8px; height: 100%;}
+        .card-back { display: none; flex-direction: column; gap: 8px; height: 100%; }
+        .ghost-card.show-guide .card-front { display: none; }
+        .ghost-card.show-guide .card-back { display: flex; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .card-title { margin: 0; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.5px;}
+        
+        /* The ? Flip Button */
+        .flip-btn { background: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .flip-btn:hover { background: var(--text-accent); color: white; border-color: var(--text-accent); }
+
+        .card-section { display: flex; flex-direction: column; gap: 4px; }
+        .section-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        
+        .card-evidences { display: flex; flex-wrap: wrap; gap: 4px; }
+        .ev-pill { background: var(--btn-neutral); border: 1px solid var(--border); font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; color: var(--text-main); font-weight: 600; }
+        
+        .tells { font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); }
+        .tells b { color: var(--text-main); font-weight: 700; background: rgba(255,255,255,0.05); padding: 0 4px; border-radius: 4px; }
+        
+        .speed-box { background: var(--bg-base); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; color: var(--spd-found-border); font-weight: 700; font-size: 0.8rem; margin-top: auto; display: flex; align-items: center; gap: 8px; }
+
+        /* Guide Card Back */
+        .guide-title { font-size: 0.9rem; font-weight: 800; color: var(--beh-found-border); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; margin: 0 0 5px 0;}
+        .guide-list { margin: 0; padding-left: 15px; font-size: 0.8rem; color: var(--text-main); line-height: 1.4;}
+        .guide-list li { margin-bottom: 4px; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; max-width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); resize: none; }
+            .sidebar-content { max-height: 40vh; }
+            .main-content { height: auto; overflow: visible; }
+            .ghost-scroll { overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-container">
+                <h1>Phasmophobia Cheatsheet</h1>
+                <p class="creator-tag">Created by <a href="https://discord.com/users/mrrobot191" class="discord-link" target="_blank">Mr. Robot</a></p>
+            </div>
+            <div class="top-controls">
+                <button class="control-btn" onclick="toggleTheme()" id="theme-toggle-btn">🌙 Theme</button>
+                <button class="control-btn" onclick="resetAll()">🔄 Reset Filters</button>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+
+            <div class="filter-group">
+                <h3>Primary Evidence</h3>
+                <div class="btn-list" id="evidence-container"></div>
+            </div>
+            
+            <div class="filter-group">
+                <h3>Speed Traits</h3>
+                <div class="btn-list" id="speed-container"></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="main-header">
+            
+            <div class="ghost-counter" id="ghost-counter">👻 <span id="count-num">27</span> / 27</div>
+
+            <div class="tools-row">
+                <div class="tool-group">
+                    <span class="tool-label">Smudge</span>
+                    <div class="timer-display" id="timer-display">00:00</div>
+                    <button class="tool-btn timer-btn-start" onclick="startTimer()">Start</button>
+                    <button class="tool-btn" onclick="stopTimer()">Reset</button>
+                    <div class="timer-milestones">
+                        <div class="milestone" id="ms-60" title="Demon">60s</div>
+                        <div class="milestone" id="ms-90" title="Normal">90s</div>
+                        <div class="milestone" id="ms-120" title="Obambo">120s</div>
+                        <div class="milestone" id="ms-180" title="Spirit">180s</div>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <span class="tool-label">Speed</span>
+                    <div class="speed-wrapper">
+                        <div class="speed-display" id="speed-display">-- m/s</div>
+                        <div class="speed-history" id="speed-history"></div>
+                    </div>
+                    <button class="tool-btn tap-btn" id="tap-btn" onclick="handleTap()">👣 Tap</button>
+                    <button class="tool-btn" onclick="resetTap()">Reset</button>
+                </div>
+
+                <div class="tool-group">
+                    <span class="tool-label">Metronome</span>
+                    <select class="metro-select" id="metro-speed">
+                        <option value="0.4">0.4 (Deo Close)</option>
+                        <option value="1.0">1.0 (Rev Hide / Old Thaye)</option>
+                        <option value="1.2">1.2 (Dayan Still)</option>
+                        <option value="1.36">1.36 (Gallu Weak)</option>
+                        <option value="1.4">1.4 (Warm Hantu)</option>
+                        <option value="1.45">1.45 (Obambo Calm)</option>
+                        <option value="1.5">1.5 (Moroi High San)</option>
+                        <option value="1.53">1.53 (Slow Twin)</option>
+                        <option value="1.7" selected>1.7 (Normal)</option>
+                        <option value="1.87">1.87 (Fast Twin)</option>
+                        <option value="1.96">1.96 (Obambo Aggr)</option>
+                        <option value="2.25">2.25 (Dayan Walk/Moroi 0 San)</option>
+                        <option value="2.5">2.5 (Jinn / Raiju)</option>
+                        <option value="2.7">2.7 (Cold Hantu)</option>
+                        <option value="2.75">2.75 (Young Thaye)</option>
+                        <option value="3.0">3.0 (Rev LOS / Deo Far)</option>
+                    </select>
+                    <button class="metro-btn" id="metro-play" onclick="toggleMetronome()">▶ Play</button>
+                </div>
+            </div>
+
+            <button class="toggle-hide-btn" id="hide-crossed-btn" onclick="toggleHideCrossed()">
+                👁️ Hide Crossed
+            </button>
+            
+        </div>
+
+        <div class="ghost-scroll">
+            <div class="ghost-grid" id="ghost-grid"></div>
+        </div>
+    </main>
+
+    <script>
+        // --- DATA ---
+        const evidenceNames = ["EMF Level 5", "DOTS Projector", "Ultraviolet", "Ghost Orb", "Ghost Writing", "Spirit Box", "Freezing Temperatures"];
+        const speedTraits = ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"];
+        
+        // Exact Phasmophobia ghost speeds for "Snap-to-Grid" calculations
+        const KNOWN_SPEEDS = [0.4, 1.0, 1.2, 1.36, 1.4, 1.45, 1.5, 1.53, 1.7, 1.87, 1.96, 2.25, 2.5, 2.7, 2.75, 3.0];
+        
+        const ghosts = [
+            { name: "Dayan", rawSpeeds: [1.2, 2.25], evidences: ["EMF Level 5", "Ghost Orb", "Spirit Box"], tells: "Speed/sanity depends on player movement within 10m. Crawls if you stand still; speeds up if you move. <b>Female models only.</b>", speed: "1.2 m/s (Still) / 2.25 (Walk)", guide: "Loop it around a small object (like kitchen island). It will speed up significantly when moving, but crawl to a halt if you stop." },
+            { name: "Gallu", rawSpeeds: [1.36, 1.7, 1.96], evidences: ["EMF Level 5", "Spirit Box", "Ultraviolet"], tells: "Cycles Normal/Enraged/Weakened. Enrages via salt, smudge, or crucifix. <b>When enraged, ignores salt</b> (can only step in salt once before 2s delay).", speed: "1.36 ➔ 1.7 ➔ 1.96 m/s", guide: "Smudge it during a hunt to enrage it. Measure the speed; it should be blazing fast (1.96). If you place salt, it will speed right over the second pile." },
+            { name: "Obambo", rawSpeeds: [1.45, 1.96], evidences: ["DOTS Projector", "Ghost Writing", "Ultraviolet"], tells: "Swaps Calm/Aggressive every 2 mins. Aggressive: 65% hunt, shorter hunts. <b>Can swap speeds mid-hunt.</b>", speed: "1.45 (Calm) / 1.96 (Aggr)", guide: "Use the Speed Tapper. If you record two vastly different speeds (1.45 and 1.96) across two different hunts, it's an Obambo." },
+            { name: "Banshee", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Ghost Orb", "Ultraviolet"], tells: "Targets ONE player. Walks right through non-targets during hunts. 33% chance to scream on Paramic. <b>Female models only.</b>", speed: "1.7 m/s (Normal)", guide: "Hold a Parabolic Microphone towards the ghost room. A unique wailing scream confirms Banshee. During multi-player hunts, stand in its way if you aren't target." },
+            { name: "Demon", rawSpeeds: [1.7], evidences: ["Freezing Temperatures", "Ghost Writing", "Ultraviolet"], tells: "Relentless (70% threshold). Smudge only prevents hunts for 60s. Crucifix range is 5m (larger than normal).", speed: "1.7 m/s (Normal)", guide: "Use the Smudge Timer tool. Smudge the room, hit start. If it hunts BEFORE 90 seconds, it's 100% a Demon." },
+            { name: "Deogen", rawSpeeds: [0.4, 3.0], evidences: ["DOTS Projector", "Ghost Writing", "Spirit Box"], tells: "Always knows your location. Extremely fast far away, drops to an agonizingly slow crawl when close. <b>Unique heavy breathing on Spirit Box.</b>", speed: "3.0 m/s (Far) ➔ 0.4 (Close)", guide: "Do NOT hide. Stand in an open area during a hunt. It will rocket toward you and slow to a snail's pace (0.4m/s) when within 3 meters." },
+            { name: "Goryo", rawSpeeds: [1.7], evidences: ["DOTS Projector", "EMF Level 5", "Ultraviolet"], tells: "DOTS only seen through camera with no one in the room. Rarely wanders and <b>never changes favorite room.</b>", speed: "1.7 m/s (Normal)", guide: "Very hard on 0 evidence. Confirm by ruling out wanders. If it NEVER changes favorite rooms even on high difficulty, suspect Goryo." },
+            { name: "Hantu", rawSpeeds: [1.4, 2.7], evidences: ["Freezing Temperatures", "Ghost Orb", "Ultraviolet"], tells: "Fast in cold rooms, slow in warm. Has <b>visible freezing breath</b> during a hunt if breaker is OFF. Never turns breaker on.", speed: "1.4 m/s (Warm) ➔ 2.7 (Cold)", guide: "Turn the breaker OFF. Hide and watch the ghost model as it hunts. If you see freezing breath coming from its head, it is a Hantu." },
+            { name: "Jinn", rawSpeeds: [1.7, 2.5], evidences: ["EMF Level 5", "Freezing Temperatures", "Ultraviolet"], tells: "Charges fast with LOS <b>if breaker is ON</b>. Never turns breaker off. Can zap 25% sanity (EMF 2 at breaker).", speed: "2.5 m/s (Far) ➔ 1.7 (Close)", guide: "Turn breaker ON. Break LOS during a hunt, then peek. If it rockets towards you (2.5m/s) and instantly slows to 1.7m/s when it gets close, it's a Jinn." },
+            { name: "Mare", rawSpeeds: [1.7], evidences: ["Ghost Orb", "Ghost Writing", "Spirit Box"], tells: "Hunts at 60% in dark, 40% in light. Frequently <b>turns lights off instantly</b>. Never turns them on.", speed: "1.7 m/s (Normal)", guide: "Turn lights ON near it. A Mare can never turn a light ON. If it instantly turns a light off the second you flip it on, highly likely Mare." },
+            { name: "Moroi", rawSpeeds: [1.5, 2.25], evidences: ["Freezing Temperatures", "Ghost Writing", "Spirit Box"], tells: "Speed scales with sanity (lower sanity = faster). Blinds for 7.5s when smudged. <b>Curses you</b> via Spirit Box/Paramic.", speed: "1.5 m/s (High San) ➔ 2.25 (0 San)", guide: "Smudge it during a loop. Normal ghosts wander blindly for 6s. A Moroi is blinded for 7.5s. Match speed to sanity level." },
+            { name: "Myling", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Ghost Writing", "Ultraviolet"], tells: "Footsteps cannot be heard during hunt until within <b>12 meters</b> (normal is 20m). Flashlight flickers first.", speed: "1.7 m/s (Normal)", guide: "Hide during a hunt with a flashlight ON the floor. If the flashlight starts flickering BEFORE you hear the footsteps, it is a Myling." },
+            { name: "Obake", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Ghost Orb", "Ultraviolet"], tells: "<b>6.66% chance to shapeshift</b> model for a single blink during a hunt. UV leaves rare 6-fingered prints.", speed: "1.7 m/s (Normal)", guide: "Loop it around a large object. Watch it blink. If it temporarily shifts into a completely different ghost model for one blink, it's an Obake." },
+            { name: "Oni", rawSpeeds: [1.7], evidences: ["DOTS Projector", "EMF Level 5", "Freezing Temperatures"], tells: "Highly visible during hunts. Drains 20% sanity on events. <b>Never does the airball mist event.</b>", speed: "1.7 m/s (Normal)", guide: "Watch it during a hunt. Normal ghosts blink invisible. An Oni stays highly visible and rarely blinks out. It also will NEVER do the mist 'hiss' event." },
+            { name: "Onryo", rawSpeeds: [1.7], evidences: ["Freezing Temperatures", "Ghost Orb", "Spirit Box"], tells: "Firelights act as crucifixes. If it blows out <b>any 3 Firelights/Candles</b>, it triggers an immediate hunt. Cannot light fires.", speed: "1.7 m/s (Normal)", guide: "Place a candle. Let it blow it out 3 times. On the 3rd blowout, if it triggers a hunt regardless of your high sanity, it's an Onryo." },
+            { name: "Phantom", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Spirit Box", "Ultraviolet"], tells: "Blinks very slowly. <b>Disappears instantly</b> if photographed during an event.", speed: "1.7 m/s (Normal)", guide: "Take a photo of it during an event. If it instantly disappears but the event sound continues, it's a Phantom. Also stays invisible longer during hunts." },
+            { name: "Poltergeist", rawSpeeds: [1.7], evidences: ["Ghost Writing", "Spirit Box", "Ultraviolet"], tells: "Throws an item every 0.5s during a hunt. Can do a <b>Polty Bomb</b> throwing multiple items at once (-2% sanity per item).", speed: "1.7 m/s (Normal)", guide: "Make a pile of items (shoes, cups, books). If the ghost touches the pile and causes a massive 'explosion' of items throwing everywhere, it's a Polty." },
+            { name: "Raiju", rawSpeeds: [1.7, 2.5], evidences: ["DOTS Projector", "EMF Level 5", "Ghost Orb"], tells: "Accelerates near active electronics. Disrupts electronics from <b>15 meters away</b>.", speed: "1.7 m/s ➔ 2.5 (Near Tech)", guide: "Place an active flashlight/DOTS on the ground. Loop the ghost over it. It will rocket to 2.5m/s when near the item, and slow down away from it." },
+            { name: "Revenant", rawSpeeds: [1.0, 3.0], evidences: ["Freezing Temperatures", "Ghost Orb", "Ghost Writing"], tells: "Crawls with no LOS. <b>Rockets toward you</b> the millisecond it gets LOS or detects electronics.", speed: "1.0 m/s (Hidden) ➔ 3.0 (LOS)", guide: "Hide well. Listen to the footsteps. They will be incredibly slow (1.0m/s). Step into its line of sight, and it will instantly rocket to 3.0m/s." },
+            { name: "Shade", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Freezing Temperatures", "Ghost Writing"], tells: "<b>Never hunts</b> if a player is in the same room. Waits until 35% sanity to hunt.", speed: "1.7 m/s (Normal)", guide: "Stand completely inside its favorite room at low sanity. A Shade is hard-coded to never initiate a hunt if you share a room with it." },
+            { name: "Spirit", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Ghost Writing", "Spirit Box"], tells: "Smudging prevents it from hunting for <b>exactly 180 seconds</b>. If it hunts before, rule it out.", speed: "1.7 m/s (Normal)", guide: "Smudge the ghost at 0% sanity. Start the Smudge Timer. If it initiates a hunt BEFORE the 180s milestone lights up, cross out Spirit." },
+            { name: "Thaye", rawSpeeds: [1.0, 2.75], evidences: ["DOTS Projector", "Ghost Orb", "Ghost Writing"], tells: "Starts game blazing fast. <b>Ages over time</b> near players, permanently slowing. No LOS speedup.", speed: "2.75 m/s (Young) ➔ 1.0 (Old)", guide: "Stand in the ghost room early. First hunt it will be 2.75m/s. Wait 15 mins near it. Next hunt it will crawl at 1.0m/s. Does NOT speed up with LOS." },
+            { name: "The Mimic", rawSpeeds: [], evidences: ["Freezing Temperatures", "Spirit Box", "Ultraviolet", "Ghost Orb"], tells: "Copies other ghosts. <b>Always shows Ghost Orbs</b>, even on 0 evidence runs. (Orbs are fake evidence).", speed: "Variable (Mimics others)", guide: "Even on a 0-Evidence custom difficulty, the Mimic will ALWAYS show Ghost Orbs on camera. If you see Orbs on a 0-ev run, you found it." },
+            { name: "The Twins", rawSpeeds: [1.53, 1.87], evidences: ["EMF Level 5", "Freezing Temperatures", "Spirit Box"], tells: "Alternates fast/slow twin. Performs <b>Twinteractions</b> (items thrown in different rooms simultaneously).", speed: "1.53 m/s (Slow) / 1.87 (Fast)", guide: "Use the Speed Tapper. If one hunt feels slow (1.53) and the next hunt feels fast (1.87), it's the Twins. Look for items thrown simultaneously." },
+            { name: "Wraith", rawSpeeds: [1.7], evidences: ["DOTS Projector", "EMF Level 5", "Spirit Box"], tells: "<b>Never steps in salt.</b> Can randomly teleport to a player outside a hunt, leaving an EMF 2.", speed: "1.7 m/s (Normal)", guide: "Cover the ghost room door with Salt. If the ghost does events or hunts outside the room but the salt remains completely untouched, it's a Wraith." },
+            { name: "Yokai", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Ghost Orb", "Spirit Box"], tells: "Hunts at 80% if talking. <b>Deaf and blind</b> beyond 2.5 meters during a hunt.", speed: "1.7 m/s (Normal)", guide: "During a hunt, hide behind a counter and shout on your microphone. A Yokai is deaf beyond 2.5 meters and will not path toward your voice." },
+            { name: "Yurei", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Freezing Temperatures", "Ghost Orb"], tells: "The only ghost that can <b>fully slam the front door shut</b> outside of a hunt (drains 15% sanity).", speed: "1.7 m/s (Normal)", guide: "Stay near the front exit. If the front door fully slams shut and locks WITHOUT a hunt or event triggering, it is a Yurei." }
+        ];
+
+        // INJECT RULES & SPEEDS
+        ghosts.forEach(g => { g.speeds = []; }); 
+        
+        const addSpeed = (name, spdArray) => { let g = ghosts.find(x => x.name === name); if(g) g.speeds.push(...spdArray); };
+        addSpeed("Dayan", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Gallu", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Obambo", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Deogen", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Hantu", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Jinn", ["Fast Ghost (>1.7 m/s)"]);
+        addSpeed("Moroi", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]); 
+        addSpeed("Raiju", ["Fast Ghost (>1.7 m/s)"]);
+        addSpeed("Revenant", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("Thaye", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("The Twins", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
+        addSpeed("The Mimic", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]); 
+
+        // STATE MANAGEMENT
+        let evStates = {}; evidenceNames.forEach(e => evStates[e] = 0);
+        let spdStates = {}; speedTraits.forEach(s => spdStates[s] = 0);
+        let hideCrossedMode = false;
+        let currentCalculatedSpeed = null;
+
+        function getIcon(state) {
+            if (state === 1) return '✅';
+            if (state === 2) return '❌';
+            return '➖';
+        }
+
+        // --- AUDIO / VISUAL NOTIFICATIONS ---
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playWarningBeep() {
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime); 
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1); 
+            osc.type = "square";
+            
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        function triggerWarning(id) {
+            document.getElementById(id).classList.add('active');
+            playWarningBeep();
+            
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.classList.remove('timer-warning-flash');
+            void timerDisplay.offsetWidth; 
+            timerDisplay.classList.add('timer-warning-flash');
+        }
+
+        // --- SPEED FINDER (SNAP-TO-GRID LOGIC & INLINE HISTORY) ---
+        const tapTimes = [];
+        const savedSpeeds = [];
+        let tapTimeout;
+
+        function handleTap() {
+            const now = Date.now();
+            tapTimes.push(now);
+            
+            if (tapTimes.length > 5) tapTimes.shift(); 
+
+            if (tapTimes.length > 1) {
+                let totalDelta = 0;
+                for (let i = 1; i < tapTimes.length; i++) {
+                    totalDelta += (tapTimes[i] - tapTimes[i-1]);
+                }
+                let avgDelta = totalDelta / (tapTimes.length - 1);
+                
+                let stepsPerSecond = 1000 / avgDelta;
+                let calculatedSpeed = stepsPerSecond * 0.85;
+                
+                // Mathematical Snap to nearest Phasmophobia specific ghost speed
+                let snappedSpeed = KNOWN_SPEEDS.reduce((prev, curr) => 
+                    Math.abs(curr - calculatedSpeed) < Math.abs(prev - calculatedSpeed) ? curr : prev
+                );
+                
+                document.getElementById('speed-display').innerText = snappedSpeed.toFixed(2) + " m/s";
+                currentCalculatedSpeed = snappedSpeed;
+                render(); 
+            }
+
+            clearTimeout(tapTimeout);
+            tapTimeout = setTimeout(() => {
+                if (currentCalculatedSpeed !== null) {
+                    savedSpeeds.unshift(currentCalculatedSpeed.toFixed(2));
+                    if (savedSpeeds.length > 3) savedSpeeds.pop();
+                    
+                    // Show history completely inline next to the speed
+                    const historyEl = document.getElementById('speed-history');
+                    historyEl.innerText = savedSpeeds.map(s => `[${s}]`).join(' ');
+                }
+                tapTimes.length = 0;
+            }, 3500);
+        }
+
+        function resetTap() {
+            tapTimes.length = 0;
+            savedSpeeds.length = 0;
+            currentCalculatedSpeed = null;
+            document.getElementById('speed-display').innerText = "-- m/s";
+            document.getElementById('speed-history').innerText = "";
+            render();
+        }
+
+        // --- METRONOME LOGIC ---
+        let metroInterval;
+        let isMetroPlaying = false;
+
+        function playClick() {
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.1);
+            
+            const btn = document.getElementById('metro-play');
+            btn.classList.add('flash');
+            setTimeout(() => { btn.classList.remove('flash'); }, 100); 
+        }
+
+        function toggleMetronome() {
+            const btn = document.getElementById('metro-play');
+            if (isMetroPlaying) {
+                clearInterval(metroInterval);
+                isMetroPlaying = false;
+                btn.innerHTML = "▶ Play";
+                btn.classList.remove('playing');
+            } else {
+                initAudio(); 
+                let speed = parseFloat(document.getElementById('metro-speed').value);
+                let intervalTime = 500 * (1.7 / speed);
+                
+                isMetroPlaying = true;
+                btn.innerHTML = "⏹ Stop";
+                btn.classList.add('playing');
+                playClick(); 
+                metroInterval = setInterval(playClick, intervalTime);
+            }
+        }
+
+        // --- TIMER LOGIC ---
+        let smudgeInterval;
+        let smudgeSeconds = 0;
+
+        function startTimer() {
+            clearInterval(smudgeInterval);
+            smudgeSeconds = 0;
+            updateTimerDisplay();
+            document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active'));
+            
+            smudgeInterval = setInterval(() => {
+                smudgeSeconds++;
+                updateTimerDisplay();
+                checkMilestones();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(smudgeInterval);
+            smudgeSeconds = 0;
+            updateTimerDisplay();
+            document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active'));
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(smudgeSeconds / 60);
+            let s = smudgeSeconds % 60;
+            document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function checkMilestones() {
+            if (smudgeSeconds === 60) triggerWarning('ms-60');
+            if (smudgeSeconds === 90) triggerWarning('ms-90');
+            if (smudgeSeconds === 120) triggerWarning('ms-120');
+            if (smudgeSeconds === 180) triggerWarning('ms-180');
+        }
+
+        // --- FLIP CARD LOGIC ---
+        function toggleFlip(ghostName, event) {
+            event.stopPropagation();
+            const card = document.getElementById('ghost-' + ghostName.replace(/\s+/g, '-'));
+            if (card) {
+                card.classList.toggle('show-guide');
+            }
+        }
+
+        // --- UI LOGIC ---
+        function init() {
+            const createBtn = (containerId, arr, statesObj, typeClass, prefix) => {
+                const container = document.getElementById(containerId);
+                arr.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = `filter-btn ${typeClass}`;
+                    btn.id = `${prefix}-${item.replace(/[^a-zA-Z0-9<>]/g, '')}`;
+                    btn.innerHTML = `<span>${item}</span> <span class="icon-placeholder" id="icon-${btn.id}">➖</span>`;
+                    btn.setAttribute('data-state', '0');
+                    btn.onclick = () => toggleState(item, statesObj, btn.id);
+                    container.appendChild(btn);
+                });
+            };
+
+            createBtn('evidence-container', evidenceNames, evStates, 'ev-btn', 'ev');
+            createBtn('speed-container', speedTraits, spdStates, 'spd-btn', 'spd');
+
+            const grid = document.getElementById('ghost-grid');
+            ghosts.forEach(ghost => {
+                const card = document.createElement('div');
+                card.className = 'ghost-card';
+                card.id = 'ghost-' + ghost.name.replace(/\s+/g, '-');
+                card.onclick = () => { card.classList.toggle('crossed-out'); updateCounter(); };
+                
+                let pills = ghost.evidences.map(e => `<span class="ev-pill">${e}</span>`).join('');
+                
+                card.innerHTML = `
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3 class="card-title">${ghost.name}</h3>
+                            <button class="flip-btn" onclick="toggleFlip('${ghost.name}', event)">❔ Guide</button>
+                        </div>
+                        <div class="card-section">
+                            <span class="section-label">Evidence</span>
+                            <div class="card-evidences">${pills}</div>
+                        </div>
+                        <div class="card-section">
+                            <span class="section-label">Behavior & Tells</span>
+                            <div class="tells">${ghost.tells}</div>
+                        </div>
+                        <div class="speed-box">🏃 ${ghost.speed}</div>
+                    </div>
+                    
+                    <div class="card-back">
+                        <div class="card-header">
+                            <h3 class="card-title">${ghost.name}</h3>
+                            <button class="flip-btn" onclick="toggleFlip('${ghost.name}', event)">🔙 Back</button>
+                        </div>
+                        <h4 class="guide-title">0-Evidence Survival Guide</h4>
+                        <ul class="guide-list">
+                            <li>${ghost.guide}</li>
+                        </ul>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            updateCounter();
+        }
+
+        function toggleState(item, statesObj, btnId) {
+            statesObj[item] = (statesObj[item] + 1) % 3;
+            document.getElementById(btnId).setAttribute('data-state', statesObj[item]);
+            document.getElementById(`icon-${btnId}`).innerText = getIcon(statesObj[item]);
+            render();
+        }
+
+        function toggleHideCrossed() {
+            hideCrossedMode = !hideCrossedMode;
+            const body = document.body;
+            const btn = document.getElementById('hide-crossed-btn');
+            
+            if (hideCrossedMode) {
+                body.classList.add('hide-crossed-mode');
+                btn.classList.add('active');
+                btn.innerHTML = '🙈 Show Crossed';
+            } else {
+                body.classList.remove('hide-crossed-mode');
+                btn.classList.remove('active');
+                btn.innerHTML = '👁️ Hide Crossed';
+            }
+        }
+
+        function resetAll() {
+            const resetObj = (statesObj, prefix) => {
+                Object.keys(statesObj).forEach(k => {
+                    statesObj[k] = 0;
+                    let btnId = `${prefix}-${k.replace(/[^a-zA-Z0-9<>]/g, '')}`;
+                    document.getElementById(btnId).setAttribute('data-state', '0');
+                    document.getElementById(`icon-${btnId}`).innerText = '➖';
+                });
+            };
+            resetObj(evStates, 'ev'); resetObj(spdStates, 'spd'); 
+            
+            document.querySelectorAll('.ghost-card.crossed-out').forEach(card => card.classList.remove('crossed-out'));
+            document.querySelectorAll('.ghost-card.show-guide').forEach(card => card.classList.remove('show-guide'));
+            resetTap();
+            render();
+        }
+
+        function render() {
+            ghosts.forEach(ghost => {
+                let isValid = true;
+                for (let ev of evidenceNames) {
+                    if (evStates[ev] === 1 && !ghost.evidences.includes(ev)) isValid = false;
+                    if (evStates[ev] === 2 && ghost.evidences.includes(ev)) isValid = false;
+                }
+                for (let spd of speedTraits) {
+                    if (spdStates[spd] === 1 && !ghost.speeds.includes(spd)) isValid = false;
+                    if (spdStates[spd] === 2 && ghost.speeds.includes(spd)) isValid = false;
+                }
+
+                // Strict Snap-to-Grid Filter
+                if (currentCalculatedSpeed !== null) {
+                    let matches = ghost.name === "The Mimic" || ghost.rawSpeeds.some(s => Math.abs(s - currentCalculatedSpeed) < 0.05);
+                    if (!matches) isValid = false;
+                }
+
+                document.getElementById('ghost-' + ghost.name.replace(/\s+/g, '-')).style.display = isValid ? 'flex' : 'none';
+            });
+            updateCounter();
+        }
+
+        function updateCounter() {
+            const visibleGhosts = Array.from(document.querySelectorAll('.ghost-card')).filter(card => 
+                card.style.display !== 'none' && !card.classList.contains('crossed-out')
+            ).length;
+            document.getElementById('count-num').innerText = visibleGhosts;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') { html.setAttribute('data-theme', 'light'); }
+            else { html.setAttribute('data-theme', 'dark'); }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
