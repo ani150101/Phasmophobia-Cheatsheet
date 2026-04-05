@@ -10,7 +10,8 @@
   "build": {
     "appId": "com.mrrobot.phasmo",
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "icon.ico"
     }
   },
   "author": "Mr. Robot",
