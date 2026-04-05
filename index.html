@@ -35,14 +35,13 @@
 
         * { box-sizing: border-box; }
         
-        /* Ensures the Electron transparent window isn't blocked by the root HTML layer */
         html { background: transparent !important; }
         
         body { 
             background-color: var(--bg-base); color: var(--text-main); 
             font-family: 'Inter', -apple-system, sans-serif; 
             margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; 
-            transition: background-color 0.3s ease, opacity 0.2s ease; 
+            transition: background-color 0.3s ease; 
         }
 
         /* ELECTRON DRAG ZONES */
@@ -86,11 +85,9 @@
         .settings-panel { display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px;}
         .setting-row { display: flex; justify-content: space-between; align-items: center; }
         .setting-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-        .setting-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; outline: none; cursor: pointer; max-width: 100px;}
+        .setting-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; outline: none; cursor: pointer; max-width: 130px;}
         .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; width: 65px; text-align: center;}
         .toggle-btn.active { background: #880000; color: white; border-color: #ff4444; }
-        
-        input[type="range"] { accent-color: var(--text-accent); width: 80px; cursor: pointer;}
 
         /* SIDEBAR TOOLS */
         .tool-card { background: rgba(128,128,128,0.05); border: 1px solid var(--border); padding: 12px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
@@ -147,7 +144,7 @@
         .toggle-hide-btn:hover { background: var(--btn-hover); }
         .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; }
         
-        /* NEW CLOSE BUTTON ON TOP RIGHT */
+        /* CLOSE BUTTON ON TOP RIGHT */
         .close-x-btn {
             background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; 
             padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 800; 
@@ -215,10 +212,6 @@
 
             <div class="settings-panel">
                 <div class="setting-row">
-                    <span class="setting-label">Opacity</span>
-                    <input type="range" id="app-opacity" min="0.2" max="1.0" step="0.05" value="1.0" oninput="updateOpacity()">
-                </div>
-                <div class="setting-row">
                     <span class="setting-label">Custom Speed</span>
                     <select class="setting-select" id="custom-speed-multiplier" onchange="updateMultipliers()">
                         <option value="0.5">50%</option>
@@ -229,11 +222,11 @@
                     </select>
                 </div>
                 <div class="setting-row">
-                    <span class="setting-label">Accuracy</span>
+                    <span class="setting-label">Tap Accuracy</span>
                     <select class="setting-select" id="tap-tolerance" onchange="updateMultipliers()">
-                        <option value="0.05">Strict</option>
-                        <option value="0.15">Normal</option>
-                        <option value="0.25" selected>Forgiving</option>
+                        <option value="0.05">Strict (±0.05)</option>
+                        <option value="0.15">Normal (±0.15)</option>
+                        <option value="0.25" selected>Forgiving (±0.25)</option>
                     </select>
                 </div>
                 <div class="setting-row">
@@ -328,15 +321,10 @@
     </main>
 
     <script>
-        // Electron App Controls
         function closeApp() {
             if (typeof window.close === 'function') {
-                window.close(); // Triggers the Electron process to terminate natively
+                window.close();
             }
-        }
-        
-        function updateOpacity() {
-            document.body.style.opacity = document.getElementById('app-opacity').value;
         }
 
         // --- DATA ---
