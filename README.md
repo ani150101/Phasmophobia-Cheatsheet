@@ -43,6 +43,7 @@ This app is entirely self-contained. No installers, no bloating your registry, a
 ## 🌐 Website (Paranoid Users 😂)
 
 For users who do not want to download random "open-source" .exe files I have made a website that would do the exact same thing. Alt + Tab is your friend 😊
+Link:
 https://ani150101.github.io/Phasmophobia-Cheatsheet/
 
 ---
