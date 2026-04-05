@@ -2,7 +2,8 @@ name: Build Phasmo EXE
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
+  workflow_dispatch: # This creates a manual 'Run' button
 
 jobs:
   build:
@@ -26,5 +27,5 @@ jobs:
     - name: Upload EXE for Download
       uses: actions/upload-artifact@v4
       with:
-        name: PhasmoOverlay
+        name: PhasmoOverlay-Ready-To-Play
         path: dist/
