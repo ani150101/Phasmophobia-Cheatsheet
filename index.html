@@ -371,7 +371,7 @@
                     <span class="tool-label">Metronome</span>
                     <select class="metro-select" id="metro-speed">
                         <option value="0.4">0.4 (Deo Close)</option>
-                        <option value="1.0">1.0 (Rev Hide/Thaye)</option>
+                        <option value="1.0">1.0 (Rev Hide / Old Thaye)</option>
                         <option value="1.2">1.2 (Dayan Still)</option>
                         <option value="1.36">1.36 (Gallu Weak)</option>
                         <option value="1.4">1.4 (Warm Hantu)</option>
@@ -381,11 +381,11 @@
                         <option value="1.7" selected>1.7 (Normal)</option>
                         <option value="1.87">1.87 (Fast Twin)</option>
                         <option value="1.96">1.96 (Obambo Aggr)</option>
-                        <option value="2.25">2.25 (Dayan Walk/Moroi)</option>
-                        <option value="2.5">2.5 (Jinn/Raiju)</option>
+                        <option value="2.25">2.25 (Dayan Walk/Moroi 0 San)</option>
+                        <option value="2.5">2.5 (Jinn / Raiju)</option>
                         <option value="2.7">2.7 (Cold Hantu)</option>
                         <option value="2.75">2.75 (Young Thaye)</option>
-                        <option value="3.0">3.0 (Rev LOS/Deo)</option>
+                        <option value="3.0">3.0 (Rev LOS / Deo Far)</option>
                     </select>
                     <button class="metro-btn" id="metro-play" onclick="toggleMetronome()">▶ Play</button>
                 </div>
@@ -536,7 +536,7 @@
             timerDisplay.classList.add('timer-warning-flash');
         }
 
-        // --- SPEED FINDER (SNAP-TO-GRID LOGIC) ---
+        // --- SPEED FINDER (SNAP-TO-GRID LOGIC & INLINE HISTORY) ---
         const tapTimes = [];
         const savedSpeeds = [];
         let tapTimeout;
@@ -545,7 +545,8 @@
             const now = Date.now();
             tapTimes.push(now);
             
-            if (tapTimes.length > 5) tapTimes.shift(); 
+            // INCREASED BUFFER TO 12 FOR EXTREME STABILITY
+            if (tapTimes.length > 12) tapTimes.shift(); 
 
             if (tapTimes.length > 1) {
                 let totalDelta = 0;
@@ -577,6 +578,7 @@
                     savedSpeeds.unshift(currentCalculatedSpeed.toFixed(2));
                     if (savedSpeeds.length > 3) savedSpeeds.pop();
                     
+                    // Show history dynamically injected as slick badges
                     const historyEl = document.getElementById('speed-history');
                     historyEl.innerHTML = savedSpeeds.map(s => `<span class="hist-pill">${s}</span>`).join('');
                 }
