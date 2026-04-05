@@ -1,7 +1,5 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, shell } = require('electron');
 
-// CRITICAL FIX: Disables hardware acceleration. This forces Windows to render 
-// the transparent background properly so your opacity slider actually works.
 app.disableHardwareAcceleration();
 
 let mainWindow;
@@ -10,11 +8,11 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
-        title: "Phasmo Cheatsheet Overlay", // Forces Task Manager to see a proper name
+        title: "Phasmophobia Cheatsheet", 
         transparent: true,     
         frame: false,          
         alwaysOnTop: true,     
-        skipTaskbar: false,    // Forces it onto the taskbar so you can see it
+        skipTaskbar: false,    
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -22,6 +20,15 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
+
+    // CRITICAL: Force all external links (like Discord) to open in your default Windows browser
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        if (url.startsWith('http')) {
+            shell.openExternal(url);
+            return { action: 'deny' }; // Stops Electron from loading the page internally
+        }
+        return { action: 'allow' };
+    });
 }
 
 app.whenReady().then(() => {
