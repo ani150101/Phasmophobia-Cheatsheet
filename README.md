@@ -12,6 +12,9 @@ A sleek, modern, always-on-top desktop overlay designed for zero-evidence and hi
 
 ---
 
+<img width="2094" height="1261" alt="image" src="https://github.com/user-attachments/assets/ae7bb65b-d266-49ef-b7bf-eb3c0f9e8159" />
+
+
 ## ✨ Features
 
 The overlay is built to float seamlessly over your game as a transparent, frameless window, giving you instant access to advanced tracking tools without losing focus on the hunt.
