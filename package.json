@@ -1,7 +1,7 @@
 {
-  "name": "phasmo-overlay",
+  "name": "phasmophobia-cheatsheet",
   "version": "1.0.0",
-  "description": "Phasmophobia Zero-Evidence Overlay",
+  "description": "Phasmophobia Cheatsheet by mrrobot191",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
