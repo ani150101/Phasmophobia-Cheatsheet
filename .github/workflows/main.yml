@@ -1,9 +1,9 @@
-name: Build Phasmo EXE
+name: Build Phasmo Single EXE
 
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # This creates a manual 'Run' button
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,11 +21,11 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Build the EXE
-      run: npx electron-packager . PhasmoOverlay --platform=win32 --arch=x64 --out=dist/ --overwrite
+    - name: Build the Single EXE
+      run: npx electron-builder --win portable
 
     - name: Upload EXE for Download
       uses: actions/upload-artifact@v4
       with:
-        name: PhasmoOverlay-Ready-To-Play
-        path: dist/
+        name: PhasmoOverlay-Standalone
+        path: dist/*.exe
