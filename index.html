@@ -73,7 +73,6 @@
         .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; min-width: 65px; text-align: center;}
         .toggle-btn.active { background: #880000; color: white; border-color: #ff4444; }
         
-        /* NEW HOTKEY BTN STYLE */
         .hotkey-btn { transition: all 0.2s ease; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; text-align: center; min-width: 65px; }
         .hotkey-btn.recording { background: var(--spd-found); border-color: var(--spd-found-border); color: white; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
@@ -127,7 +126,6 @@
         .toggle-hide-btn:hover { background: var(--btn-hover); }
         .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; }
         
-        /* CLOSE BUTTON ON TOP RIGHT */
         .close-x-btn {
             background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; 
             padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 800; 
@@ -318,13 +316,43 @@
             }
         }
 
-        // Initialize UI with saved hotkey from backend
+        // Sends visual UI choices to backend config
+        function saveUIState() {
+            if (ipcRenderer) {
+                ipcRenderer.send('update-settings', {
+                    theme: document.documentElement.getAttribute('data-theme'),
+                    customSpeed: document.getElementById('custom-speed-multiplier').value,
+                    tapTolerance: document.getElementById('tap-tolerance').value,
+                    hideCrossed: hideCrossedMode
+                });
+            }
+        }
+
+        // Initialize UI with saved data from backend
         if (ipcRenderer) {
-            ipcRenderer.on('init-hotkey', (event, savedHotkey) => {
-                const btn = document.getElementById('hotkey-btn');
-                if (btn) {
-                    btn.innerText = savedHotkey.replace('CommandOrControl', 'Ctrl');
+            ipcRenderer.on('init-config', (event, savedConfig) => {
+                if (savedConfig.hotkey) {
+                    const btn = document.getElementById('hotkey-btn');
+                    if (btn) btn.innerText = savedConfig.hotkey.replace('CommandOrControl', 'Ctrl');
                 }
+                if (savedConfig.theme) {
+                    document.documentElement.setAttribute('data-theme', savedConfig.theme);
+                }
+                if (savedConfig.customSpeed) {
+                    document.getElementById('custom-speed-multiplier').value = savedConfig.customSpeed;
+                }
+                if (savedConfig.tapTolerance) {
+                    document.getElementById('tap-tolerance').value = savedConfig.tapTolerance;
+                }
+                if (savedConfig.hideCrossed) {
+                    hideCrossedMode = true;
+                    document.body.classList.add('hide-crossed-mode');
+                    const hcBtn = document.getElementById('hide-crossed-btn');
+                    hcBtn.classList.add('active');
+                    hcBtn.innerHTML = '🙈 Show Crossed';
+                }
+                // Force a calculation based on saved loaded speeds
+                updateMultipliers(false); 
             });
         }
 
@@ -425,16 +453,28 @@
 
         function getIcon(state) { return state === 1 ? '✅' : (state === 2 ? '❌' : '➖'); }
 
+        function toggleTheme() { 
+            document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); 
+            saveUIState();
+        }
+
+        function toggleHideCrossed() {
+            hideCrossedMode = !hideCrossedMode; document.body.classList.toggle('hide-crossed-mode', hideCrossedMode);
+            const btn = document.getElementById('hide-crossed-btn'); btn.classList.toggle('active', hideCrossedMode); btn.innerHTML = hideCrossedMode ? '🙈 Show Crossed' : '👁️ Hide Crossed';
+            saveUIState();
+        }
+
         function toggleBloodMoon() {
             isBloodMoon = !isBloodMoon;
             const btn = document.getElementById('blood-moon-btn');
             btn.classList.toggle('active', isBloodMoon);
             btn.innerText = isBloodMoon ? "🩸 ON" : "🌙 OFF";
-            updateMultipliers();
+            updateMultipliers(true);
         }
 
-        function updateMultipliers() {
+        function updateMultipliers(shouldSave = true) {
             customSpeedMult = parseFloat(document.getElementById('custom-speed-multiplier').value);
+            if (shouldSave) saveUIState();
             if (currentCalculatedSpeed !== null) render(); 
         }
 
@@ -577,11 +617,6 @@
             stObj[i] = (stObj[i] + 1) % 3; document.getElementById(id).setAttribute('data-state', stObj[i]); document.getElementById(`icon-${id}`).innerText = getIcon(stObj[i]); render();
         }
 
-        function toggleHideCrossed() {
-            hideCrossedMode = !hideCrossedMode; document.body.classList.toggle('hide-crossed-mode', hideCrossedMode);
-            const btn = document.getElementById('hide-crossed-btn'); btn.classList.toggle('active', hideCrossedMode); btn.innerHTML = hideCrossedMode ? '🙈 Show Crossed' : '👁️ Hide Crossed';
-        }
-
         function resetAll() {
             const rObj = (stObj, pfx) => Object.keys(stObj).forEach(k => { stObj[k] = 0; let id = `${pfx}-${k.replace(/[^a-zA-Z0-9<>]/g, '')}`; document.getElementById(id).setAttribute('data-state', '0'); document.getElementById(`icon-${id}`).innerText = '➖'; });
             rObj(evStates, 'ev'); rObj(spdStates, 'spd'); 
@@ -605,7 +640,6 @@
         }
 
         function updateCounter() { document.getElementById('count-num').innerText = Array.from(document.querySelectorAll('.ghost-card')).filter(c => c.style.display !== 'none' && !c.classList.contains('crossed-out')).length; }
-        function toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
         window.onload = init;
     </script>
 </body>
