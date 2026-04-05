@@ -1,4 +1,5 @@
 const { app, BrowserWindow, globalShortcut, shell } = require('electron');
+const path = require('path');
 
 app.disableHardwareAcceleration();
 
@@ -9,6 +10,7 @@ function createWindow() {
         width: 1400,
         height: 900,
         title: "Phasmophobia Cheatsheet", 
+        icon: path.join(__dirname, 'icon.ico'), // Forces the taskbar & task manager icon
         transparent: true,     
         frame: false,          
         alwaysOnTop: true,     
@@ -21,11 +23,11 @@ function createWindow() {
 
     mainWindow.loadFile('index.html');
 
-    // CRITICAL: Force all external links (like Discord) to open in your default Windows browser
+    // Force all external links (like Discord) to open in your default Windows browser
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         if (url.startsWith('http')) {
             shell.openExternal(url);
-            return { action: 'deny' }; // Stops Electron from loading the page internally
+            return { action: 'deny' }; 
         }
         return { action: 'allow' };
     });
