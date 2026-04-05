@@ -40,6 +40,11 @@ This app is entirely self-contained. No installers, no bloating your registry, a
 
 > **Note:** Ensure Phasmophobia is set to **Borderless Windowed** in your graphics settings. Exclusive Fullscreen blocks third-party overlays from drawing on top of the game.
 
+## 🌐 Website (Paranoid Users 😂)
+
+For users who do not want to download random "open-source" .exe files I have made a website that would do the exact same thing. Alt + Tab is your friend 😊
+https://ani150101.github.io/Phasmophobia-Cheatsheet/
+
 ---
 
 ## 🕹️ Usage
