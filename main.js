@@ -3,42 +3,47 @@ const path = require('path');
 const fs = require('fs');
 
 let mainWindow;
-let currentHotkey = 'Alt+X'; // Fallback default
 
-// Figure out exactly where the user put the Portable .exe file
+// Default config state
+let config = {
+    hotkey: 'Alt+X',
+    bounds: { width: 1400, height: 900 },
+    theme: 'dark',
+    customSpeed: 1.0,
+    tapTolerance: 0.25,
+    hideCrossed: false
+};
+
+// Locate where to save the file
 let configPath;
 const configFileName = 'PhasmoOverlay_Settings.json';
 
 if (process.env.PORTABLE_EXECUTABLE_DIR) {
-    // If running as a compiled Portable EXE, save it exactly next to the EXE
     configPath = path.join(process.env.PORTABLE_EXECUTABLE_DIR, configFileName);
 } else if (app.isPackaged) {
-    // Fallback for standard installations
     configPath = path.join(path.dirname(app.getPath('exe')), configFileName);
 } else {
-    // If running in development (npm start)
     configPath = path.join(__dirname, configFileName);
 }
 
-// Load the hotkey from the JSON config
 function loadConfig() {
     try {
         if (fs.existsSync(configPath)) {
             const rawData = fs.readFileSync(configPath, 'utf8');
             const data = JSON.parse(rawData);
-            if (data.hotkey) {
-                currentHotkey = data.hotkey;
-            }
+            config = { ...config, ...data }; // Merge saved data into defaults
         }
     } catch (error) {
         console.error('Failed to read config file:', error);
     }
 }
 
-// Save the new hotkey to the JSON config
-function saveConfig(key) {
+function saveConfig() {
     try {
-        const data = JSON.stringify({ hotkey: key }, null, 4);
+        if (mainWindow) {
+            config.bounds = mainWindow.getBounds(); // Grab exact X, Y, W, H
+        }
+        const data = JSON.stringify(config, null, 4);
         fs.writeFileSync(configPath, data, 'utf8');
     } catch (error) {
         console.error('Failed to save config file:', error);
@@ -46,8 +51,8 @@ function saveConfig(key) {
 }
 
 function registerOverlayHotkey(keyCombination) {
-    if (currentHotkey) {
-        globalShortcut.unregister(currentHotkey);
+    if (config.hotkey && globalShortcut.isRegistered(config.hotkey)) {
+        globalShortcut.unregister(config.hotkey);
     }
 
     try {
@@ -61,8 +66,8 @@ function registerOverlayHotkey(keyCombination) {
         });
 
         if (success) {
-            currentHotkey = keyCombination;
-            saveConfig(keyCombination); // Save to file whenever successfully updated
+            config.hotkey = keyCombination;
+            saveConfig();
         }
     } catch (error) {
         console.error('Invalid hotkey:', error);
@@ -71,8 +76,10 @@ function registerOverlayHotkey(keyCombination) {
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1400,
-        height: 900,
+        width: config.bounds.width,
+        height: config.bounds.height,
+        x: config.bounds.x, // Spawns exactly where you left it
+        y: config.bounds.y,
         title: "Phasmophobia Cheatsheet", 
         icon: path.join(__dirname, 'icon.ico'),
         transparent: true,     
@@ -95,27 +102,39 @@ function createWindow() {
         return { action: 'allow' };
     });
 
-    // When the UI finishes loading, send it the saved hotkey so the button text updates
+    // Send the loaded config to the UI once it finishes loading
     mainWindow.webContents.once('did-finish-load', () => {
-        mainWindow.webContents.send('init-hotkey', currentHotkey);
+        mainWindow.webContents.send('init-config', config);
     });
+
+    // Save bounds safely when window is moved or resized (Waits 1 second to prevent lag)
+    let saveTimeout;
+    const triggerSave = () => {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveConfig, 1000);
+    };
+    mainWindow.on('resize', triggerSave);
+    mainWindow.on('move', triggerSave);
 }
 
 app.whenReady().then(() => {
-    loadConfig(); // Read the file before doing anything
+    loadConfig();
     createWindow();
-    registerOverlayHotkey(currentHotkey);
+    registerOverlayHotkey(config.hotkey);
 
     app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
-        }
+        if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 });
 
-// Listen for the UI sending a new key combination
 ipcMain.on('update-hotkey', (event, newHotkey) => {
     registerOverlayHotkey(newHotkey);
+});
+
+// Receives UI setting updates and saves them to the file
+ipcMain.on('update-settings', (event, newSettings) => {
+    config = { ...config, ...newSettings };
+    saveConfig();
 });
 
 app.on('will-quit', () => {
@@ -123,7 +142,5 @@ app.on('will-quit', () => {
 });
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    if (process.platform !== 'darwin') app.quit();
 });
