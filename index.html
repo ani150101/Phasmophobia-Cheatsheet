@@ -95,7 +95,7 @@
         .milestone.active { background: var(--ev-found); color: white; border-color: var(--ev-found-border); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
 
         .speed-display { font-size: 1.4rem; font-family: monospace; font-weight: 800; color: var(--spd-found); text-align: center; margin: 0; line-height: 1;}
-        .speed-history { display: flex; gap: 4px; justify-content: center; min-height: 18px; margin-top: 4px; }
+        .speed-history { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; margin-top: 4px; }
         .hist-pill { background: rgba(128,128,128,0.15); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; color: var(--text-muted); font-family: monospace; font-weight: 800;}
 
         .metro-select { width: 100%; max-width: none; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 6px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; outline: none; }
@@ -504,6 +504,7 @@
         let evStates = {}; evidenceNames.forEach(e => evStates[e] = 0);
         let spdStates = {}; speedTraits.forEach(s => spdStates[s] = 0);
         let hideCrossedMode = false;
+        
         let currentCalculatedSpeed = null;
         let isBloodMoon = false;
         let customSpeedMult = 1.0;
@@ -532,7 +533,7 @@
         function updateMultipliers(shouldSave = true) {
             customSpeedMult = parseFloat(document.getElementById('custom-speed-multiplier').value);
             if (shouldSave) saveUIState();
-            if (currentCalculatedSpeed !== null) render(); 
+            render(); 
         }
 
         let audioCtx;
@@ -560,9 +561,11 @@
 
         const tapTimes = [], savedSpeeds = [];
         let tapTimeout;
+        
         function handleTap() {
             const now = Date.now(); tapTimes.push(now);
-            if (tapTimes.length > 12) tapTimes.shift(); 
+            if (tapTimes.length > 8) tapTimes.shift(); 
+            
             if (tapTimes.length > 1) {
                 let totalDelta = 0;
                 for (let i = 1; i < tapTimes.length; i++) totalDelta += (tapTimes[i] - tapTimes[i-1]);
@@ -578,6 +581,7 @@
                 currentCalculatedSpeed = snappedSpeed;
                 render(); 
             }
+            
             clearTimeout(tapTimeout);
             tapTimeout = setTimeout(() => {
                 if (currentCalculatedSpeed !== null) {
@@ -586,13 +590,17 @@
                     document.getElementById('speed-history').innerHTML = savedSpeeds.map(s => `<span class="hist-pill">${s}</span>`).join('');
                 }
                 tapTimes.length = 0;
-            }, 3500);
+            }, 2000);
         }
 
         function resetTap() {
-            tapTimes.length = 0; savedSpeeds.length = 0; currentCalculatedSpeed = null;
+            tapTimes.length = 0; 
+            savedSpeeds.length = 0; 
+            currentCalculatedSpeed = null; 
+            
             document.getElementById('speed-display').innerText = "-- m/s";
-            document.getElementById('speed-history').innerHTML = ""; render();
+            document.getElementById('speed-history').innerHTML = ""; 
+            render();
         }
 
         let metroInterval, isMetroPlaying = false;
@@ -756,24 +764,28 @@
             let foundEvidences = evidenceNames.filter(ev => evStates[ev] === 1);
             let validGhosts = [];
 
+            let tm = customSpeedMult * (isBloodMoon ? 1.15 : 1.0);
+            let tol = parseFloat(document.getElementById('tap-tolerance').value);
+
             ghosts.forEach(g => {
                 let isValid = true;
                 let autoCrossReason = null;
                 
-                // 1. Base Evidence & Speed Logic (Journal Rules)
+                // 1. Base Evidence & Fixed Traits Logic
                 for (let ev of evidenceNames) { if ((evStates[ev] === 1 && !g.evidences.includes(ev)) || (evStates[ev] === 2 && g.evidences.includes(ev))) isValid = false; }
                 for (let spd of speedTraits) { if ((spdStates[spd] === 1 && !g.speeds.includes(spd)) || (spdStates[spd] === 2 && g.speeds.includes(spd))) isValid = false; }
                 
-                if (currentCalculatedSpeed !== null) {
-                    let tol = parseFloat(document.getElementById('tap-tolerance').value), tm = customSpeedMult * (isBloodMoon ? 1.15 : 1.0);
-                    if (!(g.name === "The Mimic" || g.rawSpeeds.some(bs => Math.abs((bs * tm) - currentCalculatedSpeed) <= tol))) isValid = false;
+                // 2. Active Tap Filter (Persists until Reset)
+                if (isValid && currentCalculatedSpeed !== null) {
+                    if (g.name !== "The Mimic" && !g.rawSpeeds.some(bs => Math.abs((bs * tm) - currentCalculatedSpeed) <= tol)) {
+                        isValid = false;
+                    }
                 }
 
-                // 2. Forced Evidence Eliminator
+                // 3. Forced Evidence Eliminator
                 let isAutoCrossed = false;
                 let forced = forcedEvidence[g.name];
                 
-                // Only run forced evidence checks if the ghost survived the base rules AND we are on a limited evidence mode
                 if (isValid && forced && (evidenceCount === 1 || evidenceCount === 2)) {
                     if (foundEvidences.length === evidenceCount && !foundEvidences.includes(forced)) {
                         isAutoCrossed = true;
@@ -785,12 +797,10 @@
                 const banner = card.querySelector('.auto-cross-banner');
 
                 if (!isValid) {
-                    // Fails standard journal rules -> Hide completely
                     card.style.display = 'none';
                     card.classList.remove('auto-crossed');
                     banner.style.display = 'none';
                 } else {
-                    // Survives standard rules -> Show card
                     card.style.display = 'flex';
                     
                     if (isAutoCrossed) {
@@ -801,7 +811,6 @@
                         card.classList.remove('auto-crossed');
                         banner.style.display = 'none';
                         
-                        // Only add to valid pool if NOT Auto-Crossed AND NOT Manually Crossed
                         if (!card.classList.contains('crossed-out')) {
                             validGhosts.push(g);
                         }
@@ -809,14 +818,13 @@
                 }
             });
 
-            // 3. Smart Deduction Engine
+            // 4. Smart Deduction Engine
             let possibleEvidences = new Set();
             validGhosts.forEach(g => {
                 g.evidences.forEach(ev => possibleEvidences.add(ev));
                 if (g.name === "The Mimic") possibleEvidences.add("Ghost Orb"); 
             });
 
-            // THE MIMIC SAFETY NET (Evidence Cap Fix)
             let mimicAlive = validGhosts.some(g => g.name === "The Mimic");
             let hasOrb = foundEvidences.includes("Ghost Orb");
             let realEvidenceLimit = (mimicAlive && hasOrb) ? evidenceCount + 1 : evidenceCount;
