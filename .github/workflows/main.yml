@@ -1,0 +1,30 @@
+name: Build Phasmo EXE
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Get Repository Files
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js (Cloud)
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build the EXE
+      run: npx electron-packager . PhasmoOverlay --platform=win32 --arch=x64 --out=dist/ --overwrite
+
+    - name: Upload EXE for Download
+      uses: actions/upload-artifact@v4
+      with:
+        name: PhasmoOverlay-Ready-To-Play
+        path: dist/
