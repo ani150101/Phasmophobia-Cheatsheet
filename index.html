@@ -201,7 +201,7 @@
                     <select class="setting-select" id="custom-speed-multiplier" onchange="updateMultipliers()">
                         <option value="0.5">50%</option>
                         <option value="0.75">75%</option>
-                        <option value="1.0" selected>100%</option>
+                        <option value="1" selected>100%</option>
                         <option value="1.25">125%</option>
                         <option value="1.5">150%</option>
                     </select>
@@ -268,7 +268,7 @@
                     </div>
                     <select class="metro-select" id="metro-speed">
                         <option value="0.4">0.4 (Deo Close)</option>
-                        <option value="1.0">1.0 (Rev Hide / Old Thaye)</option>
+                        <option value="1">1.0 (Rev Hide / Old Thaye)</option>
                         <option value="1.2">1.2 (Dayan Still)</option>
                         <option value="1.36">1.36 (Gallu Weak)</option>
                         <option value="1.4">1.4 (Warm Hantu)</option>
@@ -282,7 +282,7 @@
                         <option value="2.5">2.5 (Jinn / Raiju)</option>
                         <option value="2.7">2.7 (Cold Hantu)</option>
                         <option value="2.75">2.75 (Young Thaye)</option>
-                        <option value="3.0">3.0 (Rev LOS / Deo)</option>
+                        <option value="3">3.0 (Rev LOS / Deo)</option>
                     </select>
                     <button class="tool-btn tap-btn metro-btn" id="metro-play" onclick="toggleMetronome()">▶ Play</button>
                 </div>
@@ -321,8 +321,8 @@
             if (ipcRenderer) {
                 ipcRenderer.send('update-settings', {
                     theme: document.documentElement.getAttribute('data-theme'),
-                    customSpeed: document.getElementById('custom-speed-multiplier').value,
-                    tapTolerance: document.getElementById('tap-tolerance').value,
+                    customSpeed: parseFloat(document.getElementById('custom-speed-multiplier').value),
+                    tapTolerance: parseFloat(document.getElementById('tap-tolerance').value),
                     hideCrossed: hideCrossedMode
                 });
             }
@@ -339,10 +339,10 @@
                     document.documentElement.setAttribute('data-theme', savedConfig.theme);
                 }
                 if (savedConfig.customSpeed) {
-                    document.getElementById('custom-speed-multiplier').value = savedConfig.customSpeed;
+                    document.getElementById('custom-speed-multiplier').value = savedConfig.customSpeed.toString();
                 }
                 if (savedConfig.tapTolerance) {
-                    document.getElementById('tap-tolerance').value = savedConfig.tapTolerance;
+                    document.getElementById('tap-tolerance').value = savedConfig.tapTolerance.toString();
                 }
                 if (savedConfig.hideCrossed) {
                     hideCrossedMode = true;
