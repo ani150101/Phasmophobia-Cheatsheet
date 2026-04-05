@@ -69,7 +69,7 @@ https://ani150101.github.io/Phasmophobia-Cheatsheet/
 
 ## 🤝 Contact
 
-[![Discord](https://shields.io)](https://discord.com/users/mrrobot191)
+[![Discord](https://img.shields.io/badge/Mr.%20Robot-%235865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/users/426234414255570959)
 
-If this tool helps you survive your 0-Evidence runs, feel free to reach out on Discord with feedback or feature requests!
+_If this tool helps you survive your runs or learn something new, feel free to reach out on Discord with feedback or feature requests!_
 ## ENJOY! 😉
