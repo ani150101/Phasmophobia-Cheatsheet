@@ -26,5 +26,5 @@ jobs:
     - name: Upload EXE for Download
       uses: actions/upload-artifact@v4
       with:
-        name: PhasmoOverlay-Ready-To-Play
+        name: PhasmoOverlay
         path: dist/
