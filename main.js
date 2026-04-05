@@ -1,5 +1,7 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
-const path = require('path');
+
+// CRITICAL FIX: Disables hardware acceleration to fix the black background bug on Windows
+app.disableHardwareAcceleration();
 
 let mainWindow;
 
@@ -7,33 +9,28 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
-        transparent: true,     // Allows the UI rounded corners to float
-        frame: false,          // Strips away the Windows title bar and close buttons
-        alwaysOnTop: true,     // Forces it to stay over Phasmophobia
-        skipTaskbar: true,     // Keeps your taskbar clean
+        transparent: true,     // Tells the window to be see-through
+        frame: false,          // Frameless
+        alwaysOnTop: true,     
+        skipTaskbar: false,    // FIXED: App will now show in your taskbar
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
         }
     });
 
-    // Load your cheatsheet
     mainWindow.loadFile('index.html');
-
-    // Optional: Starts hidden so it doesn't block your screen immediately
-    // mainWindow.hide(); 
 }
 
 app.whenReady().then(() => {
     createWindow();
 
-    // The Global Hotkey to toggle the menu (Works inside the game)
     globalShortcut.register('Alt+X', () => {
         if (mainWindow.isVisible()) {
             mainWindow.hide();
         } else {
             mainWindow.show();
-            mainWindow.focus(); // Forces your mouse to interact with the menu
+            mainWindow.focus();
         }
     });
 
@@ -44,7 +41,6 @@ app.whenReady().then(() => {
     });
 });
 
-// Clean up hotkeys when you close the app
 app.on('will-quit', () => {
     globalShortcut.unregisterAll();
 });
