@@ -94,7 +94,7 @@
 
         .sidebar-content { padding: 15px; }
 
-        /* MULTIPLIER SETTINGS */
+        /* MULTIPLIER & ACCURACY SETTINGS */
         .settings-panel { display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;}
         .setting-row { display: flex; justify-content: space-between; align-items: center; }
         .setting-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -321,6 +321,14 @@
                     </select>
                 </div>
                 <div class="setting-row">
+                    <span class="setting-label">Tap Accuracy</span>
+                    <select class="setting-select" id="tap-tolerance" onchange="updateMultipliers()">
+                        <option value="0.05">Strict (±0.05)</option>
+                        <option value="0.15">Normal (±0.15)</option>
+                        <option value="0.25" selected>Forgiving (±0.25)</option>
+                    </select>
+                </div>
+                <div class="setting-row">
                     <span class="setting-label">Blood Moon (+15%)</span>
                     <button class="toggle-btn" id="blood-moon-btn" onclick="toggleBloodMoon()">🌙 OFF</button>
                 </div>
@@ -490,9 +498,8 @@
         function updateMultipliers() {
             customSpeedMult = parseFloat(document.getElementById('custom-speed-multiplier').value);
             if (currentCalculatedSpeed !== null) {
-                resetTap(); 
-            } else {
-                render();
+                // Re-evaluate the current speed against new tolerances/multipliers without forcing a tap reset
+                render(); 
             }
         }
 
@@ -802,13 +809,15 @@
                     if (spdStates[spd] === 2 && ghost.speeds.includes(spd)) isValid = false;
                 }
 
+                // Filtering relies on the new customizable Tap Tolerance setting
                 if (currentCalculatedSpeed !== null) {
                     let bloodMoonMult = isBloodMoon ? 1.15 : 1.0;
                     let totalMultiplier = customSpeedMult * bloodMoonMult;
+                    let tolerance = parseFloat(document.getElementById('tap-tolerance').value);
 
                     let matches = ghost.name === "The Mimic" || ghost.rawSpeeds.some(baseSpeed => {
                         let expectedSpeed = baseSpeed * totalMultiplier;
-                        return Math.abs(expectedSpeed - currentCalculatedSpeed) < 0.05;
+                        return Math.abs(expectedSpeed - currentCalculatedSpeed) <= tolerance;
                     });
                     if (!matches) isValid = false;
                 }
