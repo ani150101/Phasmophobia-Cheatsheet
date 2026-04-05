@@ -141,9 +141,19 @@
         .ghost-counter { font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin: 0; }
         .ghost-counter span { color: var(--text-accent); }
         
+        .header-controls { display: flex; gap: 10px; align-items: center; }
+        
         .toggle-hide-btn { background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;}
         .toggle-hide-btn:hover { background: var(--btn-hover); }
         .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; }
+        
+        /* NEW CLOSE BUTTON ON TOP RIGHT */
+        .close-x-btn {
+            background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; 
+            padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 800; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center;
+        }
+        .close-x-btn:hover { background: #ef4444; color: white; border-color: #dc2626; transform: scale(1.05); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
 
         /* GHOST GRID */
         .ghost-scroll { flex: 1; overflow-y: auto; padding: 25px; }
@@ -305,7 +315,11 @@
     <main class="main-content">
         <div class="main-header drag-region">
             <div class="ghost-counter no-drag" id="ghost-counter">👻 <span id="count-num">27</span> / 27</div>
-            <button class="toggle-hide-btn no-drag" id="hide-crossed-btn" onclick="toggleHideCrossed()">👁️ Hide Crossed</button>
+            
+            <div class="header-controls">
+                <button class="toggle-hide-btn no-drag" id="hide-crossed-btn" onclick="toggleHideCrossed()">👁️ Hide Crossed</button>
+                <button class="close-x-btn no-drag" onclick="closeApp()" title="Close Cheatsheet">✖</button>
+            </div>
         </div>
 
         <div class="ghost-scroll no-drag">
@@ -315,6 +329,12 @@
 
     <script>
         // Electron App Controls
+        function closeApp() {
+            if (typeof window.close === 'function') {
+                window.close(); // Triggers the Electron process to terminate natively
+            }
+        }
+        
         function updateOpacity() {
             document.body.style.opacity = document.getElementById('app-opacity').value;
         }
