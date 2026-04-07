@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phasmophobia Cheatsheet - by Mr. Robot</title>
+    <title>Phasmophobia Cheatsheet - Advanced Web Edition</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- PREMIUM MODERN PALETTE (Zinc/Violet) --- */
+        /* --- PREMIUM MODERN PALETTE --- */
         :root[data-theme="dark"] {
-            --bg-base: #09090b; 
-            --bg-panel: #18181b; 
-            --bg-card: #27272a; 
-            --text-main: #f4f4f5; 
-            --text-muted: #a1a1aa; 
-            --text-accent: #8b5cf6; 
-            --border: rgba(255,255,255,0.08);
-            --btn-neutral: rgba(255,255,255,0.05); 
-            --btn-hover: rgba(255,255,255,0.1);
-            
+            --bg-base: #09090b; --bg-panel: #18181b; --bg-card: #27272a; 
+            --text-main: #f4f4f5; --text-muted: #a1a1aa; --text-accent: #8b5cf6; 
+            --border: rgba(255,255,255,0.08); --btn-neutral: rgba(255,255,255,0.05); --btn-hover: rgba(255,255,255,0.1);
             --ev-found: #10b981; --ev-found-border: #059669;
             --ev-ruled: #ef4444; --ev-ruled-border: #dc2626;
             --beh-found: #0ea5e9; --beh-found-border: #0284c7;
@@ -30,16 +23,9 @@
         }
         
         :root[data-theme="light"] {
-            --bg-base: #f4f4f5; 
-            --bg-panel: #ffffff; 
-            --bg-card: #ffffff; 
-            --text-main: #18181b; 
-            --text-muted: #71717a; 
-            --text-accent: #7c3aed; 
-            --border: rgba(0,0,0,0.1);
-            --btn-neutral: #f4f4f5; 
-            --btn-hover: #e4e4e7;
-            
+            --bg-base: #f4f4f5; --bg-panel: #ffffff; --bg-card: #ffffff; 
+            --text-main: #18181b; --text-muted: #71717a; --text-accent: #7c3aed; 
+            --border: rgba(0,0,0,0.1); --btn-neutral: #f4f4f5; --btn-hover: #e4e4e7;
             --ev-found: #10b981; --ev-found-border: #059669;
             --ev-ruled: #ef4444; --ev-ruled-border: #dc2626;
             --beh-found: #0ea5e9; --beh-found-border: #0284c7;
@@ -49,207 +35,152 @@
 
         * { box-sizing: border-box; }
         body { 
-            background-color: var(--bg-base); 
-            color: var(--text-main); 
+            background-color: var(--bg-base); color: var(--text-main); 
             font-family: 'Inter', -apple-system, sans-serif; 
             margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; 
             transition: background-color 0.3s ease; 
         }
-        
-        /* --- RESIZABLE SIDEBAR --- */
-        .sidebar { 
-            width: 280px; min-width: 240px; max-width: 500px; 
-            background-color: var(--bg-panel); 
-            border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; 
-            z-index: 10; box-shadow: 4px 0 24px rgba(0,0,0,0.2);
-            resize: horizontal; 
-            overflow-x: hidden; overflow-y: auto; 
-        }
-        
-        .sidebar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
 
-        .sidebar-header { 
-            padding: 15px; 
-            border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; background: var(--bg-panel); z-index: 2; 
-            display: flex; flex-direction: column; gap: 12px; 
+        #app-wrapper {
+            display: flex; width: 100%; height: 100%;
         }
-        
-        .brand-container { display: flex; flex-direction: column; gap: 4px; }
-        .brand-container h1 { margin: 0; color: var(--text-accent); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; line-height: 1.2;}
-        .creator-tag { margin: 0; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar { 
+            width: 310px; min-width: 280px; max-width: 350px; 
+            background-color: var(--bg-panel); border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; 
+            z-index: 10; box-shadow: 4px 0 24px rgba(0,0,0,0.2); overflow-x: hidden; overflow-y: auto; 
+        }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+        .sidebar-header { padding: 20px 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-panel); z-index: 10; display: flex; flex-direction: column; gap: 15px; }
+        .brand-container h1 { margin: 0; color: var(--text-accent); font-size: 1.15rem; text-transform: uppercase; font-weight: 800; line-height: 1.2;}
+        .creator-tag { margin: 2px 0 0 0; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
         .discord-link { color: var(--discord-color); text-decoration: none; font-weight: 800; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px;}
         .discord-link:hover { color: #7289da; filter: drop-shadow(0 0 6px rgba(88, 101, 242, 0.4)); }
         
-        .top-controls { display: flex; justify-content: space-between; gap: 8px; }
-        .control-btn { 
-            flex: 1; background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); 
-            padding: 6px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;
-        }
+        .top-controls { display: flex; justify-content: space-between; gap: 6px; }
+        .control-btn { flex: 1; background: var(--btn-neutral); border: 1px solid var(--border); color: var(--text-main); padding: 8px 4px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s; text-align: center; }
         .control-btn:hover { background: var(--btn-hover); transform: translateY(-1px); }
-        .control-btn:active { transform: translateY(1px); }
-
         .sidebar-content { padding: 15px; }
 
-        /* MULTIPLIER & ACCURACY SETTINGS */
-        .settings-panel { display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;}
+        /* SETTINGS PANEL */
+        .settings-panel { display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px;}
         .setting-row { display: flex; justify-content: space-between; align-items: center; }
-        .setting-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .setting-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; outline: none; cursor: pointer;}
-        .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.2s; width: 65px; text-align: center;}
+        .setting-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+        .setting-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; outline: none; cursor: pointer; max-width: 130px;}
+        .toggle-btn { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; cursor: pointer; min-width: 65px; text-align: center;}
         .toggle-btn.active { background: #880000; color: white; border-color: #ff4444; }
 
+        /* FILTER BUTTONS */
         .filter-group { margin-bottom: 20px; }
-        .filter-group h3 { 
-            margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted); 
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); 
-            padding-bottom: 4px; font-weight: 800;
-        }
+        .filter-group h3 { margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 4px; font-weight: 800;}
         .btn-list { display: flex; flex-direction: column; gap: 5px; }
-        
-        .filter-btn { 
-            display: flex; justify-content: space-between; align-items: center; width: 100%; 
-            background-color: var(--btn-neutral); color: var(--text-main); border: 1px solid transparent; 
-            padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; 
-            cursor: pointer; user-select: none; transition: all 0.15s ease; text-align: left; 
-        }
+        .filter-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: var(--btn-neutral); color: var(--text-main); border: 1px solid transparent; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.15s ease; }
         .filter-btn:hover { background: var(--btn-hover); border-color: var(--border); }
-        .icon-placeholder { width: 20px; text-align: center; font-size: 0.8rem; }
+        .filter-btn.ev-btn[data-state="1"] { background: var(--ev-found); border-color: var(--ev-found-border); color: white; }
+        .filter-btn.ev-btn[data-state="2"], .filter-btn.spd-btn[data-state="2"] { background: var(--ev-ruled); border-color: var(--ev-ruled-border); color: white; opacity: 0.7; text-decoration: line-through; }
+        .filter-btn.spd-btn[data-state="1"] { background: var(--spd-found); border-color: var(--spd-found-border); color: white; }
+        .filter-btn.impossible { opacity: 0.3; text-decoration: line-through; }
 
-        /* Modern Filter Button Colors */
-        .filter-btn.ev-btn[data-state="1"] { background-color: var(--ev-found); border-color: var(--ev-found-border); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-        .filter-btn.ev-btn[data-state="2"], .filter-btn.spd-btn[data-state="2"] { 
-            background-color: var(--ev-ruled); border-color: var(--ev-ruled-border); color: white; opacity: 0.7; text-decoration: line-through; 
-        }
-        .filter-btn.spd-btn[data-state="1"] { background-color: var(--spd-found); border-color: var(--spd-found-border); color: white; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2); }
-
-        /* --- MAIN CONTENT & SOLID HEADER --- */
-        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-base); min-width: 0; }
+        /* --- HORIZONTAL PRO HEADER (COMPACTED & RIGHT ALIGNED) --- */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-base); }
         
-        /* EXTREME COMPACT SOLID HEADER */
         .main-header { 
-            padding: 8px 15px; 
-            border-bottom: 1px solid var(--border); 
-            background-color: var(--bg-panel); 
-            display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 12px; 
-            z-index: 5; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            overflow-x: auto; white-space: nowrap;
+            display: flex; align-items: center; justify-content: flex-end; 
+            padding: 8px 15px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border); 
+            z-index: 5; gap: 12px;
         }
-        .main-header::-webkit-scrollbar { height: 4px; }
-        .main-header::-webkit-scrollbar-track { background: transparent; }
-        .main-header::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        
-        .ghost-counter { font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0; flex-shrink: 0;}
-        .ghost-counter span { color: var(--text-accent); }
-        
-        /* Floating Tool Modules Scaled Down */
-        .tools-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 8px; margin-left: auto; }
 
-        .tool-group { 
-            display: flex; align-items: center; gap: 8px; 
-            background: rgba(128,128,128,0.05); border: 1px solid var(--border);
-            padding: 6px 12px; border-radius: 10px; flex-shrink: 0; 
+        .ghost-counter { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; margin-right: auto; }
+        .ghost-counter span { color: var(--text-accent); }
+
+        .header-center-tools { display: flex; gap: 8px; align-items: center; }
+
+        .header-tool-group {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 4px 10px; border-radius: 8px; white-space: nowrap;
         }
-        .tool-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .tool-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .timer-display, .speed-display { font-size: 1rem; font-family: monospace; font-weight: 800; min-width: 45px; text-align: center; }
+        .speed-display { color: var(--spd-found); min-width: 65px; }
+
+        /* Horizontal Speed History */
+        #speed-history { display: flex; gap: 4px; align-items: center; margin: 0 4px; }
+        .hist-pill { background: rgba(128,128,128,0.15); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; color: var(--text-muted); font-family: monospace; font-weight: 800;}
 
         .tool-btn { 
             background: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); 
             padding: 4px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; 
-            font-size: 0.75rem; transition: all 0.15s ease;
+            font-size: 0.7rem; transition: 0.15s ease; 
         }
-        .tool-btn:hover { background: var(--btn-hover); transform: scale(1.02); }
-        .tool-btn:active { transform: scale(0.96); }
-
-        /* Timer UI Scaled */
-        .timer-display { font-size: 1.1rem; font-family: monospace; font-weight: 800; color: var(--text-main); min-width: 50px; text-align: center;}
-        .timer-btn-start { background: var(--ev-ruled); color: white; border-color: var(--ev-ruled-border); box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);}
-        .timer-btn-start:hover { filter: brightness(1.15); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);}
+        .tool-btn:hover { background: var(--btn-hover); filter: brightness(1.1); }
         
+        .timer-btn-start { background: #ef4444; color: white; border-color: #dc2626; }
+        .timer-btn-start:hover { background: #dc2626; }
+        .tap-btn { background: #f59e0b; color: white; border-color: #d97706; }
+        .tap-btn:hover { background: #d97706; }
+
         .timer-milestones { display: flex; gap: 3px; }
-        .milestone { 
-            padding: 2px 4px; border-radius: 4px; background: rgba(128,128,128,0.1); 
-            border: 1px solid var(--border); font-size: 0.6rem; font-weight: 800; 
-            color: var(--text-muted); transition: all 0.3s ease; 
-        }
-        .milestone.active { background: var(--ev-found); border-color: var(--ev-found-border); color: white; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .milestone { padding: 2px 5px; border-radius: 4px; background: rgba(128,128,128,0.1); border: 1px solid var(--border); font-size: 0.6rem; font-weight: 800; color: var(--text-muted); transition: 0.2s;}
+        .milestone.active { background: var(--ev-found); color: white; border-color: var(--ev-found-border); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
 
-        /* Speed Finder UI - Inline Horizontal */
-        .speed-wrapper { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; min-width: 80px; }
-        .speed-display { font-size: 1.1rem; font-family: monospace; font-weight: 800; color: var(--spd-found); text-align: center; text-shadow: 0 2px 8px rgba(245, 158, 11, 0.2); line-height: normal; margin: 0; padding: 0;}
-        
-        .speed-history { display: flex; gap: 4px; align-items: center; margin: 0;}
-        .hist-pill { 
-            background: rgba(128,128,128,0.15); border: 1px solid var(--border); 
-            padding: 2px 5px; border-radius: 4px; font-size: 0.65rem; 
-            color: var(--text-muted); font-family: monospace; font-weight: 800;
-        }
-        
-        .tap-btn { background: var(--spd-found); color: white; border: 1px solid var(--spd-found-border); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);}
-        .tap-btn:hover { filter: brightness(1.15); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);}
-
-        @keyframes timerWarningFlash {
-            0% { background-color: var(--ev-ruled); color: white; box-shadow: 0 0 20px var(--ev-ruled); transform: scale(1.05); }
-            100% { background-color: transparent; color: var(--text-main); box-shadow: none; transform: scale(1); }
-        }
-        .timer-warning-flash { animation: timerWarningFlash 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        /* Metro UI Scaled */
-        .metro-select { 
-            background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); 
-            padding: 4px 6px; border-radius: 6px; font-size: 0.75rem; outline: none; font-weight: 600; max-width: 125px; cursor: pointer;
-        }
-        .metro-btn { 
-            background: var(--spd-found); color: white; border: 1px solid var(--spd-found-border); 
-            padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 0.75rem; transition: all 0.15s; 
-        }
+        .metro-select { background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; outline: none; margin: auto 0;}
         .metro-btn.playing { background: var(--btn-neutral); color: var(--text-main); border-color: var(--border); }
         .metro-btn.flash { background: #10b981 !important; color: white !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.8); border-color: #059669 !important; }
 
-        .toggle-hide-btn { 
-            background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-main); 
-            padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 700; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0;
-        }
-        .toggle-hide-btn:hover { background: var(--btn-hover); transform: scale(1.02); }
-        .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);}
+        @keyframes timerWarningFlash { 0% { background-color: var(--ev-ruled); color: white; } 100% { background-color: transparent; color: var(--text-main); } }
+        .timer-warning-flash { animation: timerWarningFlash 0.8s; }
 
-        /* --- GHOST GRID & FLIP CARDS --- */
+        .header-controls { display: flex; align-items: center; }
+        .toggle-hide-btn { background: rgba(128,128,128,0.1); border: 1px solid var(--border); color: var(--text-main); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s; white-space: nowrap;}
+        .toggle-hide-btn:hover { background: var(--btn-hover); }
+        .toggle-hide-btn.active { background: var(--text-accent); color: white; border-color: #7c3aed; }
+
+        /* BEHAVIORAL PIVOT ENGINE */
+        .recommendation-engine {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.1) 0%, rgba(39, 39, 42, 0.3) 100%);
+            border: 1px solid var(--text-accent); border-radius: 12px; padding: 15px 20px;
+            margin: 0 auto 20px auto; max-width: 1600px;
+        }
+        .recommendation-engine h4 { margin: 0 0 10px 0; color: var(--text-accent); text-transform: uppercase; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.5px; }
+        .recommendation-list { margin: 0; padding-left: 20px; font-size: 0.85rem; line-height: 1.5; color: var(--text-main); }
+        .recommendation-list li { margin-bottom: 5px; }
+        .recommendation-list b { color: var(--spd-found); }
+
+        /* GHOST GRID */
         .ghost-scroll { flex: 1; overflow-y: auto; padding: 25px; }
         .ghost-scroll::-webkit-scrollbar { width: 8px; }
         .ghost-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
-
         .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-width: 1600px; margin: 0 auto; align-items: stretch;}
         
-        .ghost-card { 
-            background: linear-gradient(145deg, var(--bg-card) 0%, rgba(39, 39, 42, 0.3) 100%);
-            border: 1px solid var(--border); border-radius: 12px; padding: 18px; cursor: pointer; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;
-        }
-        .ghost-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, transparent, transparent); transition: 0.3s;
-        }
-        .ghost-card:hover { 
-            transform: translateY(-3px); border-color: var(--text-muted); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-        }
+        .ghost-card { background: linear-gradient(145deg, var(--bg-card) 0%, rgba(39, 39, 42, 0.3) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 18px; padding-top: 24px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;}
+        .ghost-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, transparent, transparent); transition: 0.3s; z-index: 2;}
+        .ghost-card:hover { transform: translateY(-3px); border-color: var(--text-muted); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .ghost-card:hover::before { background: linear-gradient(90deg, var(--text-accent), var(--spd-found)); }
         
-        /* Calculated Speed Highlight Glow */
-        .ghost-card.speed-highlight {
-            border-color: var(--spd-found-border);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
-            background: linear-gradient(145deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 100%);
-        }
-
+        /* MANUAL CROSSED OUT */
         .ghost-card.crossed-out { opacity: 0.25; filter: grayscale(100%); transform: none; box-shadow: none; border-color: transparent; }
         .ghost-card.crossed-out .card-title { text-decoration: line-through; color: var(--text-muted); }
         .ghost-card.crossed-out::before { display: none; }
-        body.hide-crossed-mode .ghost-card.crossed-out { display: none !important; }
+        
+        /* AUTO CROSSED OUT (FORCED EVIDENCE ENGINE) */
+        .ghost-card.auto-crossed { border-color: var(--ev-ruled-border); background: rgba(239, 68, 68, 0.05); }
+        .ghost-card.auto-crossed .card-front, .ghost-card.auto-crossed .card-back { opacity: 0.5; filter: grayscale(100%); }
+        .ghost-card.auto-crossed .card-title { text-decoration: line-through; }
+        .ghost-card.auto-crossed::before { display: none; }
+        .auto-cross-banner {
+            position: absolute; top: 0; left: 0; width: 100%; background: var(--ev-ruled); color: white;
+            font-size: 0.65rem; font-weight: 800; text-align: center; padding: 3px 0; text-transform: uppercase; z-index: 10;
+        }
+
+        /* HIDE TOGGLE RULES */
+        body.hide-crossed-mode .ghost-card.crossed-out,
+        body.hide-crossed-mode .ghost-card.auto-crossed { display: none !important; }
 
         .card-front { display: flex; flex-direction: column; gap: 8px; height: 100%;}
         .card-back { display: none; flex-direction: column; gap: 8px; height: 100%; }
@@ -258,166 +189,211 @@
 
         .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         .card-title { margin: 0; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.5px;}
-        
-        /* The ? Flip Button */
-        .flip-btn { 
-            background: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); 
-            border-radius: 6px; padding: 3px 6px; font-size: 0.7rem; font-weight: 700; 
-            cursor: pointer; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .flip-btn:hover { background: var(--text-accent); color: white; border-color: var(--text-accent); transform: scale(1.05);}
+        .flip-btn { background: var(--btn-neutral); color: var(--text-main); border: 1px solid var(--border); border-radius: 6px; padding: 3px 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;}
+        .flip-btn:hover { background: var(--text-accent); color: white; border-color: var(--text-accent); }
 
         .card-section { display: flex; flex-direction: column; gap: 4px; }
-        .section-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
-        
+        .section-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; }
         .card-evidences { display: flex; flex-wrap: wrap; gap: 4px; }
-        .ev-pill { 
-            background: rgba(0,0,0,0.2); border: 1px solid var(--border); 
-            font-size: 0.7rem; padding: 3px 6px; border-radius: 6px; 
-            color: var(--text-main); font-weight: 600; 
-        }
+        .ev-pill { background: rgba(0,0,0,0.2); border: 1px solid var(--border); font-size: 0.7rem; padding: 3px 6px; border-radius: 6px; color: var(--text-main); font-weight: 600; }
         
         .tells { font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); font-weight: 400;}
         .tells b { color: var(--text-main); font-weight: 700; background: rgba(128,128,128,0.15); padding: 1px 4px; border-radius: 4px; }
-        
-        .speed-box { 
-            background: rgba(128,128,128,0.1); border: 1px solid var(--border); padding: 6px 10px; 
-            border-radius: 8px; color: var(--spd-found); font-weight: 800; font-size: 0.8rem; 
-            margin-top: auto; display: flex; align-items: center; gap: 6px; 
-        }
+        .speed-box { background: rgba(128,128,128,0.1); border: 1px solid var(--border); padding: 6px 10px; border-radius: 8px; color: var(--spd-found); font-weight: 800; font-size: 0.8rem; margin-top: auto; display: flex; align-items: center; gap: 6px; }
 
-        /* Guide Card Back */
-        .guide-title { font-size: 0.9rem; font-weight: 800; color: var(--beh-found); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px dashed var(--border); padding-bottom: 6px; margin: 0 0 4px 0;}
-        .guide-list { margin: 0; padding-left: 16px; font-size: 0.8rem; color: var(--text-main); line-height: 1.4;}
+        .guide-title { font-size: 0.9rem; font-weight: 800; color: var(--beh-found); text-transform: uppercase; border-bottom: 1px dashed var(--border); padding-bottom: 6px; margin: 0 0 4px 0;}
+        .guide-list { margin: 0; padding-left: 16px; font-size: 0.8rem; line-height: 1.4;}
         .guide-list li { margin-bottom: 4px; }
-
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="brand-container">
-                <h1>Phasmophobia Cheatsheet</h1>
-                <p class="creator-tag">Created by <a href="https://discord.com/users/mrrobot191" class="discord-link" target="_blank">Mr. Robot</a></p>
-            </div>
-            <div class="top-controls">
-                <button class="control-btn" onclick="toggleTheme()" id="theme-toggle-btn">🌙 Theme</button>
-                <button class="control-btn" onclick="resetAll()">🔄 Reset Filters</button>
-            </div>
-        </div>
-
-        <div class="sidebar-content">
-
-            <div class="settings-panel">
-                <div class="setting-row">
-                    <span class="setting-label">Custom Speed</span>
-                    <select class="setting-select" id="custom-speed-multiplier" onchange="updateMultipliers()">
-                        <option value="0.5">50%</option>
-                        <option value="0.75">75%</option>
-                        <option value="1.0" selected>100%</option>
-                        <option value="1.25">125%</option>
-                        <option value="1.5">150%</option>
-                    </select>
+    <div id="app-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-container">
+                    <h1>Phasmophobia Cheatsheet</h1>
+                    <p class="creator-tag">Created by <a href="https://discord.com/users/mrrobot191" class="discord-link" target="_blank">Mr. Robot</a></p>
                 </div>
-                <div class="setting-row">
-                    <span class="setting-label">Tap Accuracy</span>
-                    <select class="setting-select" id="tap-tolerance" onchange="updateMultipliers()">
-                        <option value="0.05">Strict (±0.05)</option>
-                        <option value="0.15">Normal (±0.15)</option>
-                        <option value="0.25" selected>Forgiving (±0.25)</option>
-                    </select>
-                </div>
-                <div class="setting-row">
-                    <span class="setting-label">Blood Moon (+15%)</span>
-                    <button class="toggle-btn" id="blood-moon-btn" onclick="toggleBloodMoon()">🌙 OFF</button>
+                <div class="top-controls">
+                    <button class="control-btn" onclick="toggleTheme()">🌙 Theme</button>
+                    <button class="control-btn" onclick="resetAll()">🔄 Reset All</button>
                 </div>
             </div>
 
-            <div class="filter-group">
-                <h3>Primary Evidence</h3>
-                <div class="btn-list" id="evidence-container"></div>
-            </div>
-            
-            <div class="filter-group">
-                <h3>Speed Traits</h3>
-                <div class="btn-list" id="speed-container"></div>
-            </div>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <div class="main-header">
-            
-            <div class="ghost-counter" id="ghost-counter">👻 <span id="count-num">27</span> / 27</div>
-
-            <div class="tools-row">
-                <div class="tool-group">
-                    <span class="tool-label">Smudge</span>
-                    <div class="timer-display" id="timer-display">00:00</div>
-                    <button class="tool-btn timer-btn-start" onclick="startTimer()">Start</button>
-                    <button class="tool-btn" onclick="stopTimer()">Reset</button>
-                    <div class="timer-milestones">
-                        <div class="milestone" id="ms-60" title="Demon">60s</div>
-                        <div class="milestone" id="ms-90" title="Normal">90s</div>
-                        <div class="milestone" id="ms-120" title="Obambo">120s</div>
-                        <div class="milestone" id="ms-180" title="Spirit">180s</div>
+            <div class="sidebar-content">
+                <div class="settings-panel">
+                    <div class="setting-row">
+                        <span class="setting-label">Evidence Given</span>
+                        <select class="setting-select" id="evidence-count" onchange="updateMultipliers()">
+                            <option value="3" selected>3</option>
+                            <option value="2">2 (Nightmare)</option>
+                            <option value="1">1 (Insanity)</option>
+                            <option value="0">0 (Zero Ev)</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <span class="setting-label">Custom Speed</span>
+                        <select class="setting-select" id="custom-speed-multiplier" onchange="updateMultipliers()">
+                            <option value="0.5">50%</option>
+                            <option value="0.75">75%</option>
+                            <option value="1" selected>100%</option>
+                            <option value="1.25">125%</option>
+                            <option value="1.5">150%</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <span class="setting-label">Tap Accuracy</span>
+                        <select class="setting-select" id="tap-tolerance" onchange="updateMultipliers()">
+                            <option value="0.05">Strict (±0.05)</option>
+                            <option value="0.15">Normal (±0.15)</option>
+                            <option value="0.25" selected>Forgiving (±0.25)</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <span class="setting-label">Blood Moon</span>
+                        <button class="toggle-btn" id="blood-moon-btn" onclick="toggleBloodMoon()">🌙 OFF</button>
                     </div>
                 </div>
 
-                <div class="tool-group">
-                    <span class="tool-label">Speed</span>
-                    <div class="speed-wrapper">
-                        <div class="speed-display" id="speed-display">-- m/s</div>
-                        <div class="speed-history" id="speed-history"></div>
+                <div class="filter-group">
+                    <h3>Primary Evidence</h3>
+                    <div class="btn-list" id="evidence-container"></div>
+                </div>
+                
+                <div class="filter-group">
+                    <h3>Speed Traits</h3>
+                    <div class="btn-list" id="speed-container"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <div class="main-header">
+                
+                <div class="ghost-counter" id="ghost-counter">👻 <span id="count-num">27</span> / 27</div>
+                
+                <div class="header-center-tools">
+                    <div class="header-tool-group">
+                        <span class="tool-label">Smudge</span>
+                        <span class="timer-display" id="timer-display">00:00</span>
+                        <button class="tool-btn timer-btn-start" onclick="startTimer()">Start</button>
+                        <button class="tool-btn" onclick="stopTimer()">Reset</button>
+                        <div class="timer-milestones">
+                            <div class="milestone" id="ms-60" title="Demon">60s</div>
+                            <div class="milestone" id="ms-90" title="Normal">90s</div>
+                            <div class="milestone" id="ms-120" title="Obambo">120s</div>
+                            <div class="milestone" id="ms-180" title="Spirit">180s</div>
+                        </div>
                     </div>
-                    <button class="tool-btn tap-btn" id="tap-btn" onclick="handleTap()">👣 Tap</button>
-                    <button class="tool-btn" onclick="resetTap()">Reset</button>
+
+                    <div class="header-tool-group">
+                        <span class="tool-label">Speed</span>
+                        <span class="speed-display" id="speed-display">-- m/s</span>
+                        
+                        <div id="speed-history"></div> 
+                        
+                        <button class="tool-btn tap-btn" id="tap-btn" onclick="handleTap()">👣 Tap</button>
+                        <button class="tool-btn" onclick="resetTap()">Reset</button>
+                    </div>
+
+                    <div class="header-tool-group">
+                        <span class="tool-label">Metronome</span>
+                        <select class="metro-select" id="metro-speed">
+                            <option value="0.4">0.4 (Deo Close)</option>
+                            <option value="1">1.0 (Rev Hide / Old Thaye)</option>
+                            <option value="1.2">1.2 (Dayan Still)</option>
+                            <option value="1.36">1.36 (Gallu Weak)</option>
+                            <option value="1.4">1.4 (Warm Hantu)</option>
+                            <option value="1.45">1.45 (Obambo Calm)</option>
+                            <option value="1.5">1.5 (Moroi High San)</option>
+                            <option value="1.53">1.53 (Slow Twin)</option>
+                            <option value="1.7" selected>1.7 (Normal)</option>
+                            <option value="1.87">1.87 (Fast Twin)</option>
+                            <option value="1.96">1.96 (Obambo Aggr)</option>
+                            <option value="2.25">2.25 (Dayan Walk/Moroi)</option>
+                            <option value="2.5">2.5 (Jinn / Raiju)</option>
+                            <option value="2.7">2.7 (Cold Hantu)</option>
+                            <option value="2.75">2.75 (Young Thaye)</option>
+                            <option value="3">3.0 (Rev LOS / Deo)</option>
+                        </select>
+                        <button class="tool-btn tap-btn metro-btn" id="metro-play" onclick="toggleMetronome()">▶ Play</button>
+                    </div>
                 </div>
 
-                <div class="tool-group">
-                    <span class="tool-label">Metronome</span>
-                    <select class="metro-select" id="metro-speed">
-                        <option value="0.4">0.4 (Deo Close)</option>
-                        <option value="1.0">1.0 (Rev Hide / Old Thaye)</option>
-                        <option value="1.2">1.2 (Dayan Still)</option>
-                        <option value="1.36">1.36 (Gallu Weak)</option>
-                        <option value="1.4">1.4 (Warm Hantu)</option>
-                        <option value="1.45">1.45 (Obambo Calm)</option>
-                        <option value="1.5">1.5 (Moroi High San)</option>
-                        <option value="1.53">1.53 (Slow Twin)</option>
-                        <option value="1.7" selected>1.7 (Normal)</option>
-                        <option value="1.87">1.87 (Fast Twin)</option>
-                        <option value="1.96">1.96 (Obambo Aggr)</option>
-                        <option value="2.25">2.25 (Dayan Walk/Moroi 0 San)</option>
-                        <option value="2.5">2.5 (Jinn / Raiju)</option>
-                        <option value="2.7">2.7 (Cold Hantu)</option>
-                        <option value="2.75">2.75 (Young Thaye)</option>
-                        <option value="3.0">3.0 (Rev LOS / Deo Far)</option>
-                    </select>
-                    <button class="metro-btn" id="metro-play" onclick="toggleMetronome()">▶ Play</button>
+                <div class="header-controls">
+                    <button class="toggle-hide-btn" id="hide-crossed-btn" onclick="toggleHideCrossed()">👁️ Hide Crossed</button>
                 </div>
             </div>
 
-            <button class="toggle-hide-btn" id="hide-crossed-btn" onclick="toggleHideCrossed()">
-                👁️ Hide Crossed
-            </button>
-            
-        </div>
-
-        <div class="ghost-scroll">
-            <div class="ghost-grid" id="ghost-grid"></div>
-        </div>
-    </main>
+            <div class="ghost-scroll">
+                
+                <div class="recommendation-engine" id="recommendation-engine" style="display: none;">
+                    <h4>🧠 Behavioral Pivot</h4>
+                    <ul class="recommendation-list" id="recommendation-list"></ul>
+                </div>
+                
+                <div class="ghost-grid" id="ghost-grid"></div>
+            </div>
+        </main>
+    </div>
 
     <script>
+        // --- LOCAL STORAGE STATE MANAGEMENT ---
+        let appConfig = {
+            theme: 'dark',
+            customSpeed: 1.0,
+            tapTolerance: 0.25,
+            evidenceCount: 3,
+            hideCrossed: false
+        };
+
+        function saveConfig() {
+            appConfig.theme = document.documentElement.getAttribute('data-theme');
+            appConfig.customSpeed = parseFloat(document.getElementById('custom-speed-multiplier').value);
+            appConfig.tapTolerance = parseFloat(document.getElementById('tap-tolerance').value);
+            appConfig.evidenceCount = parseInt(document.getElementById('evidence-count').value);
+            appConfig.hideCrossed = hideCrossedMode;
+            localStorage.setItem('phasmoSettings', JSON.stringify(appConfig));
+        }
+
+        function loadConfig() {
+            const saved = localStorage.getItem('phasmoSettings');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appConfig = { ...appConfig, ...parsed };
+                } catch(e) {}
+            }
+            
+            document.documentElement.setAttribute('data-theme', appConfig.theme);
+            document.getElementById('custom-speed-multiplier').value = appConfig.customSpeed.toString();
+            document.getElementById('tap-tolerance').value = appConfig.tapTolerance.toString();
+            document.getElementById('evidence-count').value = appConfig.evidenceCount.toString();
+            
+            if (appConfig.hideCrossed) {
+                hideCrossedMode = true;
+                document.body.classList.add('hide-crossed-mode');
+                const hcBtn = document.getElementById('hide-crossed-btn');
+                hcBtn.classList.add('active');
+                hcBtn.innerHTML = '🙈 Show Crossed';
+            }
+        }
+
         // --- DATA ---
         const evidenceNames = ["EMF Level 5", "DOTS Projector", "Ultraviolet", "Ghost Orb", "Ghost Writing", "Spirit Box", "Freezing Temperatures"];
         const speedTraits = ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"];
-        
-        // Exact base Phasmophobia ghost speeds for "Snap-to-Grid" calculations
         const KNOWN_SPEEDS = [0.4, 1.0, 1.2, 1.36, 1.4, 1.45, 1.5, 1.53, 1.7, 1.87, 1.96, 2.25, 2.5, 2.7, 2.75, 3.0];
         
+        const forcedEvidence = {
+            "Deogen": "Spirit Box",
+            "Moroi": "Spirit Box",
+            "Goryo": "DOTS Projector",
+            "Hantu": "Freezing Temperatures",
+            "Obake": "Ultraviolet"
+        };
+
         const ghosts = [
             { name: "Dayan", rawSpeeds: [1.2, 2.25], evidences: ["EMF Level 5", "Ghost Orb", "Spirit Box"], tells: "Speed/sanity depends on player movement within 10m. Crawls if you stand still; speeds up if you move. <b>Female models only.</b>", speed: "1.2 m/s (Still) / 2.25 (Walk)", guide: "Loop it around a small object (like kitchen island). It will speed up significantly when moving, but crawl to a halt if you stop." },
             { name: "Gallu", rawSpeeds: [1.36, 1.7, 1.96], evidences: ["EMF Level 5", "Spirit Box", "Ultraviolet"], tells: "Cycles Normal/Enraged/Weakened. Enrages via salt, smudge, or crucifix. <b>When enraged, ignores salt</b> (can only step in salt once before 2s delay).", speed: "1.36 ➔ 1.7 ➔ 1.96 m/s", guide: "Smudge it during a hunt to enrage it. Measure the speed; it should be blazing fast (1.96). If you place salt, it will speed right over the second pile." },
@@ -448,9 +424,7 @@
             { name: "Yurei", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Freezing Temperatures", "Ghost Orb"], tells: "The only ghost that can <b>fully slam the front door shut</b> outside of a hunt (drains 15% sanity).", speed: "1.7 m/s (Normal)", guide: "Stay near the front exit. If the front door fully slams shut and locks WITHOUT a hunt or event triggering, it is a Yurei." }
         ];
 
-        // INJECT RULES & SPEEDS
         ghosts.forEach(g => { g.speeds = []; }); 
-        
         const addSpeed = (name, spdArray) => { let g = ghosts.find(x => x.name === name); if(g) g.speeds.push(...spdArray); };
         addSpeed("Dayan", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
         addSpeed("Gallu", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
@@ -465,381 +439,372 @@
         addSpeed("The Twins", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
         addSpeed("The Mimic", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]); 
 
-        // STATE MANAGEMENT
         let evStates = {}; evidenceNames.forEach(e => evStates[e] = 0);
         let spdStates = {}; speedTraits.forEach(s => spdStates[s] = 0);
         let hideCrossedMode = false;
-        let currentCalculatedSpeed = null;
         
-        // MULTIPLIER SETTINGS
+        let currentCalculatedSpeed = null;
         let isBloodMoon = false;
         let customSpeedMult = 1.0;
 
-        function getIcon(state) {
-            if (state === 1) return '✅';
-            if (state === 2) return '❌';
-            return '➖';
+        function getIcon(state) { return state === 1 ? '✅' : (state === 2 ? '❌' : '➖'); }
+
+        function toggleTheme() { 
+            document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); 
+            saveConfig();
         }
 
-        // --- GLOBAL SETTINGS LOGIC ---
+        function toggleHideCrossed() {
+            hideCrossedMode = !hideCrossedMode; document.body.classList.toggle('hide-crossed-mode', hideCrossedMode);
+            const btn = document.getElementById('hide-crossed-btn'); btn.classList.toggle('active', hideCrossedMode); btn.innerHTML = hideCrossedMode ? '🙈 Show Crossed' : '👁️ Hide Crossed';
+            saveConfig();
+        }
+
         function toggleBloodMoon() {
             isBloodMoon = !isBloodMoon;
             const btn = document.getElementById('blood-moon-btn');
-            if (isBloodMoon) {
-                btn.classList.add('active');
-                btn.innerText = "🩸 ON";
-            } else {
-                btn.classList.remove('active');
-                btn.innerText = "🌙 OFF";
-            }
-            updateMultipliers();
+            btn.classList.toggle('active', isBloodMoon);
+            btn.innerText = isBloodMoon ? "🩸 ON" : "🌙 OFF";
+            updateMultipliers(true);
         }
 
-        function updateMultipliers() {
+        function updateMultipliers(shouldSave = true) {
             customSpeedMult = parseFloat(document.getElementById('custom-speed-multiplier').value);
-            if (currentCalculatedSpeed !== null) {
-                // Re-evaluate the current speed against new tolerances/multipliers without forcing a tap reset
-                render(); 
-            }
+            if (shouldSave) saveConfig();
+            render(); 
         }
 
-        // --- AUDIO / VISUAL NOTIFICATIONS ---
         let audioCtx;
         function initAudio() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         function playWarningBeep() {
             initAudio();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime); 
-            osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1); 
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1); 
             osc.type = "square";
-            
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-            
-            osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.3);
         }
 
         function triggerWarning(id) {
             document.getElementById(id).classList.add('active');
             playWarningBeep();
-            
-            const timerDisplay = document.getElementById('timer-display');
-            timerDisplay.classList.remove('timer-warning-flash');
-            void timerDisplay.offsetWidth; 
-            timerDisplay.classList.add('timer-warning-flash');
+            const td = document.getElementById('timer-display');
+            td.classList.remove('timer-warning-flash'); void td.offsetWidth; td.classList.add('timer-warning-flash');
         }
 
-        // --- SPEED FINDER (SNAP-TO-GRID LOGIC) ---
-        const tapTimes = [];
-        const savedSpeeds = [];
+        // SPEED TAPPER & PARADOX ENGINE
+        const tapTimes = [], savedSpeeds = [];
         let tapTimeout;
-
+        
         function handleTap() {
-            const now = Date.now();
-            tapTimes.push(now);
+            const now = Date.now(); tapTimes.push(now);
+            if (tapTimes.length > 8) tapTimes.shift(); 
             
-            if (tapTimes.length > 12) tapTimes.shift(); 
-
             if (tapTimes.length > 1) {
                 let totalDelta = 0;
-                for (let i = 1; i < tapTimes.length; i++) {
-                    totalDelta += (tapTimes[i] - tapTimes[i-1]);
-                }
-                let avgDelta = totalDelta / (tapTimes.length - 1);
-                
-                let stepsPerSecond = 1000 / avgDelta;
-                let calculatedSpeed = stepsPerSecond * 0.85;
+                for (let i = 1; i < tapTimes.length; i++) totalDelta += (tapTimes[i] - tapTimes[i-1]);
+                let calculatedSpeed = (1000 / (totalDelta / (tapTimes.length - 1))) * 0.85;
                 
                 let bloodMoonMult = isBloodMoon ? 1.15 : 1.0;
                 let totalMultiplier = customSpeedMult * bloodMoonMult;
-                
                 let adjustedSpeeds = KNOWN_SPEEDS.map(s => s * totalMultiplier);
                 
-                let snappedSpeed = adjustedSpeeds.reduce((prev, curr) => 
-                    Math.abs(curr - calculatedSpeed) < Math.abs(prev - calculatedSpeed) ? curr : prev
-                );
+                let snappedSpeed = adjustedSpeeds.reduce((prev, curr) => Math.abs(curr - calculatedSpeed) < Math.abs(prev - calculatedSpeed) ? curr : prev);
                 
                 document.getElementById('speed-display').innerText = snappedSpeed.toFixed(2) + " m/s";
                 currentCalculatedSpeed = snappedSpeed;
                 render(); 
             }
-
+            
             clearTimeout(tapTimeout);
             tapTimeout = setTimeout(() => {
                 if (currentCalculatedSpeed !== null) {
-                    savedSpeeds.unshift(currentCalculatedSpeed.toFixed(2));
-                    if (savedSpeeds.length > 3) savedSpeeds.pop();
-                    
-                    const historyEl = document.getElementById('speed-history');
-                    historyEl.innerHTML = savedSpeeds.map(s => `<span class="hist-pill">${s}</span>`).join('');
+                    if (!savedSpeeds.some(s => Math.abs(s - currentCalculatedSpeed) < 0.01)) {
+                        savedSpeeds.unshift(currentCalculatedSpeed);
+                        if (savedSpeeds.length > 3) savedSpeeds.pop();
+                    }
+                    document.getElementById('speed-history').innerHTML = savedSpeeds.map(s => `<span class="hist-pill">${s.toFixed(2)}</span>`).join('');
                 }
                 tapTimes.length = 0;
-            }, 3500);
+                currentCalculatedSpeed = null;
+                document.getElementById('speed-display').innerText = "-- m/s";
+                render();
+            }, 2000);
         }
 
         function resetTap() {
-            tapTimes.length = 0;
-            savedSpeeds.length = 0;
-            currentCalculatedSpeed = null;
+            tapTimes.length = 0; 
+            savedSpeeds.length = 0; 
+            currentCalculatedSpeed = null; 
+            
             document.getElementById('speed-display').innerText = "-- m/s";
-            document.getElementById('speed-history').innerHTML = "";
+            document.getElementById('speed-history').innerHTML = ""; 
             render();
         }
 
-        // --- METRONOME LOGIC ---
-        let metroInterval;
-        let isMetroPlaying = false;
-
+        let metroInterval, isMetroPlaying = false;
         function playClick() {
             initAudio();
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            
-            osc.type = "triangle";
-            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
-            
-            gain.gain.setValueAtTime(1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + 0.1);
-            
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = "triangle"; osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            gain.gain.setValueAtTime(1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.1);
             const btn = document.getElementById('metro-play');
-            btn.classList.add('flash');
-            setTimeout(() => { btn.classList.remove('flash'); }, 100); 
+            btn.classList.add('flash'); setTimeout(() => btn.classList.remove('flash'), 100); 
         }
 
         function toggleMetronome() {
             const btn = document.getElementById('metro-play');
             if (isMetroPlaying) {
-                clearInterval(metroInterval);
-                isMetroPlaying = false;
-                btn.innerHTML = "▶ Play";
-                btn.classList.remove('playing');
+                clearInterval(metroInterval); isMetroPlaying = false; btn.innerHTML = "▶ Play"; btn.classList.remove('playing');
             } else {
                 initAudio(); 
-                
                 let baseSpeed = parseFloat(document.getElementById('metro-speed').value);
-                let bloodMoonMult = isBloodMoon ? 1.15 : 1.0;
-                let totalMultiplier = customSpeedMult * bloodMoonMult;
-                let actualSpeed = baseSpeed * totalMultiplier;
-                
-                let intervalTime = 500 * (1.7 / actualSpeed);
-                
-                isMetroPlaying = true;
-                btn.innerHTML = "⏹ Stop";
-                btn.classList.add('playing');
-                playClick(); 
-                metroInterval = setInterval(playClick, intervalTime);
+                let actualSpeed = baseSpeed * (customSpeedMult * (isBloodMoon ? 1.15 : 1.0));
+                isMetroPlaying = true; btn.innerHTML = "⏹ Stop"; btn.classList.add('playing');
+                playClick(); metroInterval = setInterval(playClick, 500 * (1.7 / actualSpeed));
             }
         }
 
-        // --- TIMER LOGIC ---
-        let smudgeInterval;
-        let smudgeSeconds = 0;
-
+        let smudgeInterval, smudgeSeconds = 0;
         function startTimer() {
-            clearInterval(smudgeInterval);
-            smudgeSeconds = 0;
-            updateTimerDisplay();
+            clearInterval(smudgeInterval); smudgeSeconds = 0; updateTimerDisplay();
             document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active'));
-            
             smudgeInterval = setInterval(() => {
-                smudgeSeconds++;
-                updateTimerDisplay();
-                checkMilestones();
+                smudgeSeconds++; updateTimerDisplay();
+                if (smudgeSeconds === 60) triggerWarning('ms-60');
+                if (smudgeSeconds === 90) triggerWarning('ms-90');
+                if (smudgeSeconds === 120) triggerWarning('ms-120');
+                if (smudgeSeconds === 180) triggerWarning('ms-180');
             }, 1000);
         }
+        function stopTimer() { clearInterval(smudgeInterval); smudgeSeconds = 0; updateTimerDisplay(); document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active')); }
+        function updateTimerDisplay() { let m = Math.floor(smudgeSeconds / 60), s = smudgeSeconds % 60; document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
 
-        function stopTimer() {
-            clearInterval(smudgeInterval);
-            smudgeSeconds = 0;
-            updateTimerDisplay();
-            document.querySelectorAll('.milestone').forEach(el => el.classList.remove('active'));
+        function toggleFlip(ghostName, event) { 
+            event.stopPropagation(); 
+            const card = document.getElementById('ghost-' + ghostName.replace(/\s+/g, '-')); 
+            if (card) card.classList.toggle('show-guide'); 
         }
 
-        function updateTimerDisplay() {
-            let m = Math.floor(smudgeSeconds / 60);
-            let s = smudgeSeconds % 60;
-            document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-        }
-
-        function checkMilestones() {
-            if (smudgeSeconds === 60) triggerWarning('ms-60');
-            if (smudgeSeconds === 90) triggerWarning('ms-90');
-            if (smudgeSeconds === 120) triggerWarning('ms-120');
-            if (smudgeSeconds === 180) triggerWarning('ms-180');
-        }
-
-        // --- FLIP CARD LOGIC ---
-        function toggleFlip(ghostName, event) {
-            event.stopPropagation();
-            const card = document.getElementById('ghost-' + ghostName.replace(/\s+/g, '-'));
-            if (card) {
-                card.classList.toggle('show-guide');
-            }
-        }
-
-        // --- UI LOGIC ---
         function init() {
-            const createBtn = (containerId, arr, statesObj, typeClass, prefix) => {
-                const container = document.getElementById(containerId);
-                arr.forEach(item => {
-                    const btn = document.createElement('button');
-                    btn.className = `filter-btn ${typeClass}`;
-                    btn.id = `${prefix}-${item.replace(/[^a-zA-Z0-9<>]/g, '')}`;
-                    btn.innerHTML = `<span>${item}</span> <span class="icon-placeholder" id="icon-${btn.id}">➖</span>`;
-                    btn.setAttribute('data-state', '0');
-                    btn.onclick = () => toggleState(item, statesObj, btn.id);
-                    container.appendChild(btn);
+            loadConfig(); 
+
+            const createBtn = (cId, arr, stObj, tc, pfx) => {
+                const c = document.getElementById(cId);
+                arr.forEach(i => {
+                    const b = document.createElement('button'); b.className = `filter-btn ${tc} no-drag`; b.id = `${pfx}-${i.replace(/[^a-zA-Z0-9<>]/g, '')}`;
+                    b.innerHTML = `<span>${i}</span> <span class="icon-placeholder" id="icon-${b.id}">➖</span>`;
+                    b.setAttribute('data-state', '0'); b.onclick = () => toggleState(i, stObj, b.id); c.appendChild(b);
                 });
             };
-
             createBtn('evidence-container', evidenceNames, evStates, 'ev-btn', 'ev');
             createBtn('speed-container', speedTraits, spdStates, 'spd-btn', 'spd');
 
             const grid = document.getElementById('ghost-grid');
-            ghosts.forEach(ghost => {
-                const card = document.createElement('div');
-                card.className = 'ghost-card';
-                card.id = 'ghost-' + ghost.name.replace(/\s+/g, '-');
-                card.onclick = () => { card.classList.toggle('crossed-out'); updateCounter(); };
+            ghosts.forEach(g => {
+                const card = document.createElement('div'); 
+                card.className = 'ghost-card'; 
+                card.id = 'ghost-' + g.name.replace(/\s+/g, '-');
                 
-                let pills = ghost.evidences.map(e => `<span class="ev-pill">${e}</span>`).join('');
+                card.onclick = (e) => { 
+                    if(e.target.classList.contains('flip-btn')) return;
+                    card.classList.toggle('crossed-out'); 
+                    render(); 
+                };
                 
                 card.innerHTML = `
+                    <div class="auto-cross-banner" style="display: none;"></div>
                     <div class="card-front">
-                        <div class="card-header">
-                            <h3 class="card-title">${ghost.name}</h3>
-                            <button class="flip-btn" onclick="toggleFlip('${ghost.name}', event)">❔ Guide</button>
-                        </div>
-                        <div class="card-section">
-                            <span class="section-label">Evidence</span>
-                            <div class="card-evidences">${pills}</div>
-                        </div>
-                        <div class="card-section">
-                            <span class="section-label">Behavior & Tells</span>
-                            <div class="tells">${ghost.tells}</div>
-                        </div>
-                        <div class="speed-box">🏃 ${ghost.speed}</div>
+                        <div class="card-header"><h3 class="card-title">${g.name}</h3><button class="flip-btn no-drag" onclick="toggleFlip('${g.name}', event)">❔ Guide</button></div>
+                        <div class="card-section"><span class="section-label">Evidence</span><div class="card-evidences">${g.evidences.map(e => `<span class="ev-pill">${e}</span>`).join('')}</div></div>
+                        <div class="card-section"><span class="section-label">Behavior & Tells</span><div class="tells">${g.tells}</div></div>
+                        <div class="speed-box">🏃 ${g.speed}</div>
                     </div>
-                    
                     <div class="card-back">
-                        <div class="card-header">
-                            <h3 class="card-title">${ghost.name}</h3>
-                            <button class="flip-btn" onclick="toggleFlip('${ghost.name}', event)">🔙 Back</button>
-                        </div>
+                        <div class="card-header"><h3 class="card-title">${g.name}</h3><button class="flip-btn no-drag" onclick="toggleFlip('${g.name}', event)">🔙 Back</button></div>
                         <h4 class="guide-title">0-Evidence Survival Guide</h4>
-                        <ul class="guide-list">
-                            <li>${ghost.guide}</li>
-                        </ul>
-                    </div>
-                `;
+                        <ul class="guide-list"><li>${g.guide}</li></ul>
+                    </div>`;
                 grid.appendChild(card);
             });
             updateCounter();
+            render(); 
         }
 
-        function toggleState(item, statesObj, btnId) {
-            statesObj[item] = (statesObj[item] + 1) % 3;
-            document.getElementById(btnId).setAttribute('data-state', statesObj[item]);
-            document.getElementById(`icon-${btnId}`).innerText = getIcon(statesObj[item]);
-            render();
-        }
-
-        function toggleHideCrossed() {
-            hideCrossedMode = !hideCrossedMode;
-            const body = document.body;
-            const btn = document.getElementById('hide-crossed-btn');
-            
-            if (hideCrossedMode) {
-                body.classList.add('hide-crossed-mode');
-                btn.classList.add('active');
-                btn.innerHTML = '🙈 Show Crossed';
-            } else {
-                body.classList.remove('hide-crossed-mode');
-                btn.classList.remove('active');
-                btn.innerHTML = '👁️ Hide Crossed';
-            }
+        function toggleState(i, stObj, id) {
+            stObj[i] = (stObj[i] + 1) % 3; document.getElementById(id).setAttribute('data-state', stObj[i]); document.getElementById(`icon-${id}`).innerText = getIcon(stObj[i]); render();
         }
 
         function resetAll() {
-            const resetObj = (statesObj, prefix) => {
-                Object.keys(statesObj).forEach(k => {
-                    statesObj[k] = 0;
-                    let btnId = `${prefix}-${k.replace(/[^a-zA-Z0-9<>]/g, '')}`;
-                    document.getElementById(btnId).setAttribute('data-state', '0');
-                    document.getElementById(`icon-${btnId}`).innerText = '➖';
-                });
-            };
-            resetObj(evStates, 'ev'); resetObj(spdStates, 'spd'); 
-            
-            document.querySelectorAll('.ghost-card.crossed-out').forEach(card => card.classList.remove('crossed-out'));
-            document.querySelectorAll('.ghost-card.show-guide').forEach(card => card.classList.remove('show-guide'));
-            resetTap();
-            render();
+            const rObj = (stObj, pfx) => Object.keys(stObj).forEach(k => { stObj[k] = 0; let id = `${pfx}-${k.replace(/[^a-zA-Z0-9<>]/g, '')}`; document.getElementById(id).setAttribute('data-state', '0'); document.getElementById(`icon-${id}`).innerText = '➖'; });
+            rObj(evStates, 'ev'); rObj(spdStates, 'spd'); 
+            document.querySelectorAll('.ghost-card.crossed-out').forEach(c => c.classList.remove('crossed-out'));
+            document.querySelectorAll('.ghost-card.show-guide').forEach(c => c.classList.remove('show-guide'));
+            resetTap(); stopTimer(); render();
+        }
+
+        function updateRecommendations(validGhosts) {
+            const engineContainer = document.getElementById('recommendation-engine');
+            const list = document.getElementById('recommendation-list');
+            list.innerHTML = '';
+
+            if (validGhosts.length === 0 || validGhosts.length === ghosts.length) {
+                engineContainer.style.display = 'none';
+                return;
+            }
+            if (validGhosts.length === 1) {
+                engineContainer.style.display = 'none';
+                return;
+            }
+
+            engineContainer.style.display = 'block';
+            let recs = [];
+            let gNames = validGhosts.map(g => g.name);
+
+            if (gNames.includes("Jinn") || gNames.includes("Hantu") || gNames.includes("Mare")) {
+                recs.push("<b>Breaker/Lights:</b> Turn the breaker ON/OFF. Jinn is fast with it ON, Hantu shows freezing breath with it OFF. Mare instantly turns lights off.");
+            }
+            if (gNames.includes("Wraith") || gNames.includes("Gallu")) {
+                recs.push("<b>Salt Test:</b> Place salt in doorways. Wraith never steps in it; enraged Gallu ignores the second pile.");
+            }
+            if (gNames.includes("Onryo")) {
+                recs.push("<b>Candle Test:</b> Place a lit candle. If it blows it out 3 times and hunts immediately, it's an Onryo.");
+            }
+            if (gNames.includes("Poltergeist") || gNames.includes("The Twins")) {
+                recs.push("<b>Item Throws:</b> Make a pile of items. Polty will explode them; Twins may throw items in different rooms simultaneously.");
+            }
+            if (gNames.includes("Demon") || gNames.includes("Spirit") || gNames.includes("Moroi")) {
+                recs.push("<b>Smudge Test:</b> Smudge the ghost. Demon can hunt before 90s, Spirit is blocked for 180s. Moroi is blinded for 7.5s during a hunt.");
+            }
+            if (gNames.includes("Deogen") || gNames.includes("Revenant") || gNames.includes("Thaye")) {
+                recs.push("<b>Hunt Speed:</b> Loop the ghost. Deogen crawls near you, Revenant rockets with LOS, Thaye starts blazing fast and ages/slows down.");
+            }
+            if (gNames.includes("Phantom") || gNames.includes("Oni") || gNames.includes("Banshee")) {
+                recs.push("<b>Events/Audio:</b> Take a photo during an event (Phantom vanishes), look for the airball mist (Oni never does it), or use Paramic for Banshee wail.");
+            }
+            if (gNames.includes("Myling")) {
+                recs.push("<b>Footsteps:</b> Hide with a flashlight ON the floor. If it flickers before you hear footsteps, it's a Myling.");
+            }
+
+            recs = recs.slice(0, 3);
+
+            if (recs.length === 0) {
+                recs.push("Gather more evidence or observe hunt speeds to narrow down the list.");
+            }
+
+            recs.forEach(r => {
+                let li = document.createElement('li');
+                li.innerHTML = r;
+                list.appendChild(li);
+            });
         }
 
         function render() {
-            ghosts.forEach(ghost => {
+            let evidenceCount = parseInt(document.getElementById('evidence-count').value);
+            let foundEvidences = evidenceNames.filter(ev => evStates[ev] === 1);
+            let validGhosts = [];
+
+            let tm = customSpeedMult * (isBloodMoon ? 1.15 : 1.0);
+            let tol = parseFloat(document.getElementById('tap-tolerance').value);
+
+            ghosts.forEach(g => {
                 let isValid = true;
-                for (let ev of evidenceNames) {
-                    if (evStates[ev] === 1 && !ghost.evidences.includes(ev)) isValid = false;
-                    if (evStates[ev] === 2 && ghost.evidences.includes(ev)) isValid = false;
-                }
-                for (let spd of speedTraits) {
-                    if (spdStates[spd] === 1 && !ghost.speeds.includes(spd)) isValid = false;
-                    if (spdStates[spd] === 2 && ghost.speeds.includes(spd)) isValid = false;
-                }
-
-                // Filtering relies on the new customizable Tap Tolerance setting
-                if (currentCalculatedSpeed !== null) {
-                    let bloodMoonMult = isBloodMoon ? 1.15 : 1.0;
-                    let totalMultiplier = customSpeedMult * bloodMoonMult;
-                    let tolerance = parseFloat(document.getElementById('tap-tolerance').value);
-
-                    let matches = ghost.name === "The Mimic" || ghost.rawSpeeds.some(baseSpeed => {
-                        let expectedSpeed = baseSpeed * totalMultiplier;
-                        return Math.abs(expectedSpeed - currentCalculatedSpeed) <= tolerance;
-                    });
-                    if (!matches) isValid = false;
+                let autoCrossReason = null;
+                
+                // 1. Base Evidence & Fixed Traits Logic
+                for (let ev of evidenceNames) { if ((evStates[ev] === 1 && !g.evidences.includes(ev)) || (evStates[ev] === 2 && g.evidences.includes(ev))) isValid = false; }
+                for (let spd of speedTraits) { if ((spdStates[spd] === 1 && !g.speeds.includes(spd)) || (spdStates[spd] === 2 && g.speeds.includes(spd))) isValid = false; }
+                
+                // 2. PARADOX ENGINE: Cross-references ALL saved speeds in history
+                if (savedSpeeds.length > 0) {
+                    for (let ls of savedSpeeds) {
+                        if (g.name !== "The Mimic" && !g.rawSpeeds.some(bs => Math.abs((bs * tm) - ls) <= tol)) {
+                            isValid = false;
+                            break; 
+                        }
+                    }
                 }
 
-                document.getElementById('ghost-' + ghost.name.replace(/\s+/g, '-')).style.display = isValid ? 'flex' : 'none';
+                // Active Tap Filter
+                if (isValid && currentCalculatedSpeed !== null && !savedSpeeds.includes(currentCalculatedSpeed)) {
+                    if (g.name !== "The Mimic" && !g.rawSpeeds.some(bs => Math.abs((bs * tm) - currentCalculatedSpeed) <= tol)) {
+                        isValid = false;
+                    }
+                }
+
+                // 3. Forced Evidence Eliminator
+                let isAutoCrossed = false;
+                let forced = forcedEvidence[g.name];
+                
+                if (isValid && forced && (evidenceCount === 1 || evidenceCount === 2)) {
+                    if (foundEvidences.length === evidenceCount && !foundEvidences.includes(forced)) {
+                        isAutoCrossed = true;
+                        autoCrossReason = `Missing Forced: ${forced}`;
+                    }
+                }
+
+                const card = document.getElementById('ghost-' + g.name.replace(/\s+/g, '-'));
+                const banner = card.querySelector('.auto-cross-banner');
+
+                if (!isValid) {
+                    card.style.display = 'none';
+                    card.classList.remove('auto-crossed');
+                    banner.style.display = 'none';
+                } else {
+                    card.style.display = 'flex';
+                    
+                    if (isAutoCrossed) {
+                        card.classList.add('auto-crossed');
+                        banner.innerText = autoCrossReason;
+                        banner.style.display = 'block';
+                    } else {
+                        card.classList.remove('auto-crossed');
+                        banner.style.display = 'none';
+                        
+                        if (!card.classList.contains('crossed-out')) {
+                            validGhosts.push(g);
+                        }
+                    }
+                }
             });
+
+            // 4. Smart Deduction Engine
+            let possibleEvidences = new Set();
+            validGhosts.forEach(g => {
+                g.evidences.forEach(ev => possibleEvidences.add(ev));
+                if (g.name === "The Mimic") possibleEvidences.add("Ghost Orb"); 
+            });
+
+            let mimicAlive = validGhosts.some(g => g.name === "The Mimic");
+            let hasOrb = foundEvidences.includes("Ghost Orb");
+            let realEvidenceLimit = (mimicAlive && hasOrb) ? evidenceCount + 1 : evidenceCount;
+            
+            let atEvidenceLimit = (foundEvidences.length >= realEvidenceLimit);
+
+            evidenceNames.forEach(ev => {
+                const btn = document.getElementById('ev-' + ev.replace(/[^a-zA-Z0-9<>]/g, ''));
+                let isImpossible = !possibleEvidences.has(ev) || (atEvidenceLimit && evStates[ev] === 0);
+                
+                if (isImpossible && evStates[ev] === 0) {
+                    btn.classList.add('impossible');
+                } else {
+                    btn.classList.remove('impossible');
+                }
+            });
+
+            updateRecommendations(validGhosts);
             updateCounter();
         }
 
-        function updateCounter() {
-            const visibleGhosts = Array.from(document.querySelectorAll('.ghost-card')).filter(card => 
-                card.style.display !== 'none' && !card.classList.contains('crossed-out')
-            ).length;
-            document.getElementById('count-num').innerText = visibleGhosts;
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            if (html.getAttribute('data-theme') === 'dark') { html.setAttribute('data-theme', 'light'); }
-            else { html.setAttribute('data-theme', 'dark'); }
-        }
-
+        function updateCounter() { document.getElementById('count-num').innerText = Array.from(document.querySelectorAll('.ghost-card')).filter(c => c.style.display !== 'none' && !c.classList.contains('crossed-out') && !c.classList.contains('auto-crossed')).length; }
+        
         window.onload = init;
     </script>
 </body>
