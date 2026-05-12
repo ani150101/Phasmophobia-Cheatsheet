@@ -90,9 +90,10 @@
         .main-header { 
             display: flex; align-items: center; justify-content: flex-end; 
             padding: 8px 15px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border); 
-            z-index: 5; gap: 12px;
+            z-index: 5; gap: 10px;
         }
 
+        /* Pushes all other flex items tightly to the right */
         .ghost-counter { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0; white-space: nowrap; margin-right: auto; }
         .ghost-counter span { color: var(--text-accent); }
 
@@ -272,7 +273,7 @@
             
             <div class="main-header">
                 
-                <div class="ghost-counter" id="ghost-counter">👻 <span id="count-num">27</span> / 27</div>
+                <div class="ghost-counter" id="ghost-counter">👻 <span id="count-num">29</span> / 29</div>
                 
                 <div class="header-center-tools">
                     <div class="header-tool-group">
@@ -395,19 +396,21 @@
         };
 
         const ghosts = [
-            { name: "Dayan", rawSpeeds: [1.2, 2.25], evidences: ["EMF Level 5", "Ghost Orb", "Spirit Box"], tells: "Speed/sanity depends on player movement within 10m. Crawls if you stand still; speeds up if you move. <b>Female models only.</b>", speed: "1.2 m/s (Still) / 2.25 (Walk)", guide: "Loop it around a small object (like kitchen island). It will speed up significantly when moving, but crawl to a halt if you stop." },
-            { name: "Gallu", rawSpeeds: [1.36, 1.7, 1.96], evidences: ["EMF Level 5", "Spirit Box", "Ultraviolet"], tells: "Cycles Normal/Enraged/Weakened. Enrages via salt, smudge, or crucifix. <b>When enraged, ignores salt</b> (can only step in salt once before 2s delay).", speed: "1.36 ➔ 1.7 ➔ 1.96 m/s", guide: "Smudge it during a hunt to enrage it. Measure the speed; it should be blazing fast (1.96). If you place salt, it will speed right over the second pile." },
-            { name: "Obambo", rawSpeeds: [1.45, 1.96], evidences: ["DOTS Projector", "Ghost Writing", "Ultraviolet"], tells: "Swaps Calm/Aggressive every 2 mins. Aggressive: 65% hunt, shorter hunts. <b>Can swap speeds mid-hunt.</b>", speed: "1.45 (Calm) / 1.96 (Aggr)", guide: "Use the Speed Tapper. If you record two vastly different speeds (1.45 and 1.96) across two different hunts, it's an Obambo." },
+            { name: "Aswang", rawSpeeds: [1.7, 3.0], evidences: ["DOTS Projector", "Freezing Temperatures", "Ghost Writing"], tells: "Prefers chasing over searching. <b>Accelerates rapidly</b> in pursuit when it spots a target.", speed: "1.7 m/s ➔ 3.0 (LOS)", guide: "Break line of sight immediately during a hunt. An Aswang gains significant speed when it is actively chasing you." },
             { name: "Banshee", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Ghost Orb", "Ultraviolet"], tells: "Targets ONE player. Walks right through non-targets during hunts. 33% chance to scream on Paramic. <b>Female models only.</b>", speed: "1.7 m/s (Normal)", guide: "Hold a Parabolic Microphone towards the ghost room. A unique wailing scream confirms Banshee. During multi-player hunts, stand in its way if you aren't target." },
+            { name: "Dayan", rawSpeeds: [1.2, 2.25], evidences: ["EMF Level 5", "Ghost Orb", "Spirit Box"], tells: "Speed/sanity depends on player movement within 10m. Crawls if you stand still; speeds up if you move. <b>Female models only.</b>", speed: "1.2 m/s (Still) / 2.25 (Walk)", guide: "Loop it around a small object (like kitchen island). It will speed up significantly when moving, but crawl to a halt if you stop." },
             { name: "Demon", rawSpeeds: [1.7], evidences: ["Freezing Temperatures", "Ghost Writing", "Ultraviolet"], tells: "Relentless (70% threshold). Smudge only prevents hunts for 60s. Crucifix range is 5m (larger than normal).", speed: "1.7 m/s (Normal)", guide: "Use the Smudge Timer tool. Smudge the room, hit start. If it hunts BEFORE 90 seconds, it's 100% a Demon." },
             { name: "Deogen", rawSpeeds: [0.4, 3.0], evidences: ["DOTS Projector", "Ghost Writing", "Spirit Box"], tells: "Always knows your location. Extremely fast far away, drops to an agonizingly slow crawl when close. <b>Unique heavy breathing on Spirit Box.</b>", speed: "3.0 m/s (Far) ➔ 0.4 (Close)", guide: "Do NOT hide. Stand in an open area during a hunt. It will rocket toward you and slow to a snail's pace (0.4m/s) when within 3 meters." },
+            { name: "Gallu", rawSpeeds: [1.36, 1.7, 1.96], evidences: ["EMF Level 5", "Spirit Box", "Ultraviolet"], tells: "Cycles Normal/Enraged/Weakened. Enrages via salt, smudge, or crucifix. <b>When enraged, ignores salt</b> (can only step in salt once before 2s delay).", speed: "1.36 ➔ 1.7 ➔ 1.96 m/s", guide: "Smudge it during a hunt to enrage it. Measure the speed; it should be blazing fast (1.96). If you place salt, it will speed right over the second pile." },
             { name: "Goryo", rawSpeeds: [1.7], evidences: ["DOTS Projector", "EMF Level 5", "Ultraviolet"], tells: "DOTS only seen through camera with no one in the room. Rarely wanders and <b>never changes favorite room.</b>", speed: "1.7 m/s (Normal)", guide: "Very hard on 0 evidence. Confirm by ruling out wanders. If it NEVER changes favorite rooms even on high difficulty, suspect Goryo." },
             { name: "Hantu", rawSpeeds: [1.4, 2.7], evidences: ["Freezing Temperatures", "Ghost Orb", "Ultraviolet"], tells: "Fast in cold rooms, slow in warm. Has <b>visible freezing breath</b> during a hunt if breaker is OFF. Never turns breaker on.", speed: "1.4 m/s (Warm) ➔ 2.7 (Cold)", guide: "Turn the breaker OFF. Hide and watch the ghost model as it hunts. If you see freezing breath coming from its head, it is a Hantu." },
             { name: "Jinn", rawSpeeds: [1.7, 2.5], evidences: ["EMF Level 5", "Freezing Temperatures", "Ultraviolet"], tells: "Charges fast with LOS <b>if breaker is ON</b>. Never turns breaker off. Can zap 25% sanity (EMF 2 at breaker).", speed: "2.5 m/s (Far) ➔ 1.7 (Close)", guide: "Turn breaker ON. Break LOS during a hunt, then peek. If it rockets towards you (2.5m/s) and instantly slows to 1.7m/s when it gets close, it's a Jinn." },
+            { name: "Kormos", rawSpeeds: [1.7], evidences: ["Ghost Orb", "Spirit Box", "Ultraviolet"], tells: "Has incredibly strong hearing but is <b>nearly blind</b>. Highly sensitive to noise and electronics.", speed: "1.7 m/s (Normal)", guide: "Stay absolutely silent and keep equipment off during a hunt. It struggles to see you visually, but will instantly path to noise." },
             { name: "Mare", rawSpeeds: [1.7], evidences: ["Ghost Orb", "Ghost Writing", "Spirit Box"], tells: "Hunts at 60% in dark, 40% in light. Frequently <b>turns lights off instantly</b>. Never turns them on.", speed: "1.7 m/s (Normal)", guide: "Turn lights ON near it. A Mare can never turn a light ON. If it instantly turns a light off the second you flip it on, highly likely Mare." },
             { name: "Moroi", rawSpeeds: [1.5, 2.25], evidences: ["Freezing Temperatures", "Ghost Writing", "Spirit Box"], tells: "Speed scales with sanity (lower sanity = faster). Blinds for 7.5s when smudged. <b>Curses you</b> via Spirit Box/Paramic.", speed: "1.5 m/s (High San) ➔ 2.25 (0 San)", guide: "Smudge it during a loop. Normal ghosts wander blindly for 6s. A Moroi is blinded for 7.5s. Match speed to sanity level." },
             { name: "Myling", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Ghost Writing", "Ultraviolet"], tells: "Footsteps cannot be heard during hunt until within <b>12 meters</b> (normal is 20m). Flashlight flickers first.", speed: "1.7 m/s (Normal)", guide: "Hide during a hunt with a flashlight ON the floor. If the flashlight starts flickering BEFORE you hear the footsteps, it is a Myling." },
             { name: "Obake", rawSpeeds: [1.7], evidences: ["EMF Level 5", "Ghost Orb", "Ultraviolet"], tells: "<b>6.66% chance to shapeshift</b> model for a single blink during a hunt. UV leaves rare 6-fingered prints.", speed: "1.7 m/s (Normal)", guide: "Loop it around a large object. Watch it blink. If it temporarily shifts into a completely different ghost model for one blink, it's an Obake." },
+            { name: "Obambo", rawSpeeds: [1.45, 1.96], evidences: ["DOTS Projector", "Ghost Writing", "Ultraviolet"], tells: "Swaps Calm/Aggressive every 2 mins. Aggressive: 65% hunt, shorter hunts. <b>Can swap speeds mid-hunt.</b>", speed: "1.45 (Calm) / 1.96 (Aggr)", guide: "Use the Speed Tapper. If you record two vastly different speeds (1.45 and 1.96) across two different hunts, it's an Obambo." },
             { name: "Oni", rawSpeeds: [1.7], evidences: ["DOTS Projector", "EMF Level 5", "Freezing Temperatures"], tells: "Highly visible during hunts. Drains 20% sanity on events. <b>Never does the airball mist event.</b>", speed: "1.7 m/s (Normal)", guide: "Watch it during a hunt. Normal ghosts blink invisible. An Oni stays highly visible and rarely blinks out. It also will NEVER do the mist 'hiss' event." },
             { name: "Onryo", rawSpeeds: [1.7], evidences: ["Freezing Temperatures", "Ghost Orb", "Spirit Box"], tells: "Firelights act as crucifixes. If it blows out <b>any 3 Firelights/Candles</b>, it triggers an immediate hunt. Cannot light fires.", speed: "1.7 m/s (Normal)", guide: "Place a candle. Let it blow it out 3 times. On the 3rd blowout, if it triggers a hunt regardless of your high sanity, it's an Onryo." },
             { name: "Phantom", rawSpeeds: [1.7], evidences: ["DOTS Projector", "Spirit Box", "Ultraviolet"], tells: "Blinks very slowly. <b>Disappears instantly</b> if photographed during an event.", speed: "1.7 m/s (Normal)", guide: "Take a photo of it during an event. If it instantly disappears but the event sound continues, it's a Phantom. Also stays invisible longer during hunts." },
@@ -426,6 +429,8 @@
 
         ghosts.forEach(g => { g.speeds = []; }); 
         const addSpeed = (name, spdArray) => { let g = ghosts.find(x => x.name === name); if(g) g.speeds.push(...spdArray); };
+        
+        addSpeed("Aswang", ["Fast Ghost (>1.7 m/s)"]);
         addSpeed("Dayan", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
         addSpeed("Gallu", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
         addSpeed("Obambo", ["Fast Ghost (>1.7 m/s)", "Slow Ghost (<1.7 m/s)"]);
@@ -683,14 +688,14 @@
             if (gNames.includes("Demon") || gNames.includes("Spirit") || gNames.includes("Moroi")) {
                 recs.push("<b>Smudge Test:</b> Smudge the ghost. Demon can hunt before 90s, Spirit is blocked for 180s. Moroi is blinded for 7.5s during a hunt.");
             }
-            if (gNames.includes("Deogen") || gNames.includes("Revenant") || gNames.includes("Thaye")) {
-                recs.push("<b>Hunt Speed:</b> Loop the ghost. Deogen crawls near you, Revenant rockets with LOS, Thaye starts blazing fast and ages/slows down.");
+            if (gNames.includes("Deogen") || gNames.includes("Revenant") || gNames.includes("Thaye") || gNames.includes("Aswang")) {
+                recs.push("<b>Hunt Speed:</b> Loop the ghost. Deogen crawls near you, Revenant and Aswang rocket with LOS, Thaye starts blazing fast and ages/slows down.");
             }
             if (gNames.includes("Phantom") || gNames.includes("Oni") || gNames.includes("Banshee")) {
                 recs.push("<b>Events/Audio:</b> Take a photo during an event (Phantom vanishes), look for the airball mist (Oni never does it), or use Paramic for Banshee wail.");
             }
-            if (gNames.includes("Myling")) {
-                recs.push("<b>Footsteps:</b> Hide with a flashlight ON the floor. If it flickers before you hear footsteps, it's a Myling.");
+            if (gNames.includes("Myling") || gNames.includes("Kormos")) {
+                recs.push("<b>Sound & Footsteps:</b> Hide with a flashlight ON the floor. Myling flickers it before you hear footsteps. Kormos is blind but paths directly to noise/electronics.");
             }
 
             recs = recs.slice(0, 3);
